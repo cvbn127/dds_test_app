@@ -40,6 +40,14 @@
 #include "Image/ImageSubscriber.h"
 #include "Image/ImageTools.h"
 
+#include "PathVelocities/PathVelocitiesPublisher.h"
+#include "PathVelocities/PathVelocitiesSubscriber.h"
+#include "PathVelocities/PathVelocitiesTools.h"
+
+#include "PolygonArray/PolygonArrayPublisher.h"
+#include "PolygonArray/PolygonArraySubscriber.h"
+#include "PolygonArray/PolygonArrayTools.h"
+
 #include <fastrtps/Domain.h>
 
 using namespace eprosima;
@@ -106,6 +114,30 @@ int main(int argc, char** argv)
 		if (strcmp(argv[1], "occupancy_tools") == 0)
 		{
 			type = 14;
+		}
+		if (strcmp(argv[1], "path_velocities_pub") == 0)
+		{
+			type = 15;
+		}
+		if (strcmp(argv[1], "path_velocities_sub") == 0)
+		{
+			type = 16;
+		}
+		if (strcmp(argv[1], "path_velocities_tools") == 0)
+		{
+			type = 17;
+		}
+		if (strcmp(argv[1], "polygon_array_pub") == 0)
+		{
+			type = 18;
+		}
+		if (strcmp(argv[1], "polygon_array_sub") == 0)
+		{
+			type = 19;
+		}
+		if (strcmp(argv[1], "polygon_array_tools") == 0)
+		{
+			type = 20;
 		}
 	}
 	int num_bytes = 0;
@@ -270,6 +302,60 @@ int main(int argc, char** argv)
 			if (occu_tools.init())
 			{
 				occu_tools.run();
+			}
+			break;
+		}
+		case 15:
+		{
+			PathVelocitiesPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 16:
+		{
+			PathVelocitiesSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 17:
+		{
+			PathVelocitiesTools tools;
+			if (tools.init())
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 18:
+		{
+			PolygonArrayPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 19:
+		{
+			PolygonArraySubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 20:
+		{
+			PolygonArrayTools tools;
+			if (tools.init())
+			{
+				tools.run();
 			}
 			break;
 		}

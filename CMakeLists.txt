@@ -12,18 +12,7 @@ find_package(fastrtps REQUIRED)
 
 set(MESSAGES_PATH /volumes/fastrtps_gen/fastrtps_gen/sources)
 
-# message(STATUS "Configuring String...")
-# add_library(String_lib ${MESSAGES_PATH}/std_msgs/msg/String.cxx)
-# target_link_libraries(String_lib fastcdr fastrtps)
-# target_include_directories(String_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/std_msgs/msg)
 
-# target_include_directories(String_pub_sub PUBLIC ${MESSAGES_PATH}/std_msgs)
-    
-# message(STATUS "Configuring Odometry...")
-# add_library(Odometry_lib ${MESSAGES_PATH}/nav_msgs/msg/Odometry.cxx)
-# target_link_libraries(Odometry_lib fastcdr fastrtps)
-# target_include_directories(Odometry_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/nav_msgs/msg )
- 
 
 message(STATUS "Configuring builtin_interfaces...")
 file(GLOB_RECURSE BUILTIN_INTERFACES_SRCS ${MESSAGES_PATH}/builtin_interfaces/msg/*.cxx)
@@ -54,6 +43,12 @@ file(GLOB_RECURSE SENSOR_MSGS_SRCS ${MESSAGES_PATH}/sensor_msgs/msg/*.cxx)
 add_library(Sensor_msgs_lib ${SENSOR_MSGS_SRCS})
 target_link_libraries(Sensor_msgs_lib fastcdr fastrtps)
 target_include_directories(Sensor_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/sensor_msgs/msg )
+
+message(STATUS "Configuring gis_rtk_msgs...")
+file(GLOB_RECURSE GIS_RTK_MSGS_SRCS ${MESSAGES_PATH}/gis_rtk_msgs/msg/*.cxx)
+add_library(GisRtk_msgs_lib ${GIS_RTK_MSGS_SRCS})
+target_link_libraries(GisRtk_msgs_lib fastcdr fastrtps)
+target_include_directories(GisRtk_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/gis_rtk_msgs/msg )
 
 
 
@@ -103,6 +98,22 @@ add_library(Image_pub_sub
 target_link_libraries(Image_pub_sub fastcdr fastrtps Sensor_msgs_lib)
 target_include_directories(Image_pub_sub PUBLIC include/Image)
 
+add_library(PathVelocities_pub_sub
+    src/PathVelocities/PathVelocitiesPublisher.cxx
+    src/PathVelocities/PathVelocitiesSubscriber.cxx
+    src/PathVelocities/PathVelocitiesTools.cxx
+)
+target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps GisRtk_msgs_lib)
+target_include_directories(PathVelocities_pub_sub PUBLIC include/PathVelocities)
+
+add_library(PolygonArray_pub_sub
+    src/PolygonArray/PolygonArrayPublisher.cxx
+    src/PolygonArray/PolygonArraySubscriber.cxx
+    src/PolygonArray/PolygonArrayTools.cxx
+)
+target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps GisRtk_msgs_lib)
+target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
+
 add_executable(TestApp src/main.cxx)
 # target_link_libraries(TestApp fastcdr fastrtps
 #     Geometry_msgs_lib
@@ -127,4 +138,8 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     Sensor_msgs_lib
     Image_pub_sub
+
+    GisRtk_msgs_lib
+    PolygonArray_pub_sub
+    PathVelocities_pub_sub
 )
