@@ -33,10 +33,16 @@ using namespace eprosima::fastrtps::rtps;
 
 std::function<void(const sensor_msgs::msg::Image&)> ImageSubscriber::callback = [](auto msg){};
 
-ImageSubscriber::ImageSubscriber() : mp_participant(nullptr), mp_subscriber(nullptr) {
+ImageSubscriber::ImageSubscriber(eprosima::fastrtps::Participant *participant) : mp_participant(participant), mp_subscriber(nullptr) {
 }
 
-ImageSubscriber::~ImageSubscriber() {	Domain::removeParticipant(mp_participant);}
+ImageSubscriber::~ImageSubscriber() 
+{
+    if (should_delete_participant)
+    {
+    	Domain::removeParticipant(mp_participant);
+    }
+}
 
 void ImageSubscriber::set_callback(std::function<void(const sensor_msgs::msg::Image&)> cb)
 {
@@ -45,21 +51,17 @@ void ImageSubscriber::set_callback(std::function<void(const sensor_msgs::msg::Im
 
 bool ImageSubscriber::init()
 {
-    // Create RTPSParticipant
-
-    ParticipantAttributes PParam;
-    PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
-    PParam.rtps.builtin.domainId = 120;
-    // PParam.domainId = 120;
-    // PParam.rtps.builtin.readerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    // PParam.rtps.builtin.writerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    mp_participant = Domain::createParticipant(PParam);
     if(mp_participant == nullptr)
     {
-        return false;
+        should_delete_participant = true;
+        ParticipantAttributes PParam;
+        PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
+        PParam.rtps.builtin.domainId = 120;
+        // PParam.domainId = 120;
+        // PParam.rtps.builtin.readerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+        // PParam.rtps.builtin.writerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
+        mp_participant = Domain::createParticipant(PParam);
     }
-
-    //Register the type
 
     Domain::registerType(mp_participant, static_cast<TopicDataType*>(&myType));
 
@@ -95,6 +97,10 @@ void ImageSubscriber::SubListener::onSubscriptionMatched(Subscriber* sub,Matchin
     }
 }
 
+int last_seq_numb = -1;
+int miss_count = 0;
+
+
 void ImageSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
 {
     // Take data
@@ -110,9 +116,26 @@ void ImageSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
             ++n_msg;
             std::cout << "Sample received, count=" << n_msg << std::endl;
             callback(st);
-            // std::cout << "st.header().frame_id() " << st.header().frame_id() << std::endl;
+            std::cout << "st.header().frame_id() " << st.header().frame_id() << std::endl;
+            int sn = std::atoi(st.header().frame_id().c_str());
+            if (last_seq_numb == -1)
+            {
+                last_seq_numb = sn;
+            }
+            else
+            {
+                auto diff = sn - last_seq_numb;
+                last_seq_numb = sn;
+                if (diff > 1)
+                {
+                    miss_count++;
+                    std::cout << "************************************************************************************" << std::endl;
+                    std::cout << "************************************************************************************" << std::endl;
+                    std::cout << "************************************************************************************" << std::endl;
+                }
+            }
+            std::cout << "missed " << miss_count << std::endl;
             // std::cout << "st.header().stamp().sec() " << st.header().stamp().sec() << std::endl; 
-            // std::cout << "st.child_frame_id() " << st.child_frame_id() << std::endl;
             // std::cout << "st.pose().covariance()[0] " << st.pose().covariance()[0] << std::endl;
             // std::cout << "st.pose().covariance()[1] " << st.pose().covariance()[1] << std::endl;
             // std::cout << "st.twist().covariance()[0] " << st.twist().covariance()[0] << std::endl;
@@ -124,8 +147,13 @@ void ImageSubscriber::SubListener::onNewDataMessage(Subscriber* sub)
 
 void ImageSubscriber::run()
 {
-    std::cout << "Waiting for Data, press Enter to stop the Subscriber. "<<std::endl;
-    std::cin.ignore();
-    std::cout << "Shutting down the Subscriber." << std::endl;
+    std::cout << "Running. "<<std::endl;
+    bool should_stop = false;
+    char c = 0;
+    while(!should_stop)
+    {
+        std::cin >> c;
+        should_stop = c == 'q'? true : false;
+    }
 }
 

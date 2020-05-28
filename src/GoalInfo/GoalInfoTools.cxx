@@ -1,4 +1,4 @@
-#include "ImageTools.h"
+#include "GoalInfoTools.h"
 
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/Domain.h>
@@ -12,7 +12,7 @@ using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
 
-ImageTools::~ImageTools()
+GoalInfoTools::~GoalInfoTools()
 {
     if (participant != nullptr)
     {
@@ -20,7 +20,7 @@ ImageTools::~ImageTools()
     }
 }
 
-bool ImageTools::init(const std::string& file_path, const std::string &profile_name)
+bool GoalInfoTools::init(const std::string& file_path, const std::string &profile_name)
 {
     if (XMLP_ret::XML_OK != XMLProfileManager::loadXMLFile(file_path))
     {
@@ -29,8 +29,8 @@ bool ImageTools::init(const std::string& file_path, const std::string &profile_n
     }
     participant = Domain::createParticipant(profile_name);
 
-    subscriber = std::make_unique<ImageSubscriber>(participant);
-    publisher = std::make_unique<ImagePublisher>(participant);
+    subscriber = std::make_unique<GoalInfoSubscriber>(participant);
+    publisher = std::make_unique<GoalInfoPublisher>(participant);
 
     bool result = subscriber->init();
     if (!result)
@@ -47,7 +47,7 @@ bool ImageTools::init(const std::string& file_path, const std::string &profile_n
     return result;
 }
 
-void ImageTools::run()
+void GoalInfoTools::run()
 {
     subscriber->run();
 }

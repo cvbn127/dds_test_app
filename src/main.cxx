@@ -48,6 +48,10 @@
 #include "PolygonArray/PolygonArraySubscriber.h"
 #include "PolygonArray/PolygonArrayTools.h"
 
+#include "GoalInfo/GoalInfoPublisher.h"
+#include "GoalInfo/GoalInfoSubscriber.h"
+#include "GoalInfo/GoalInfoTools.h"
+
 #include <fastrtps/Domain.h>
 
 using namespace eprosima;
@@ -138,6 +142,18 @@ int main(int argc, char** argv)
 		if (strcmp(argv[1], "polygon_array_tools") == 0)
 		{
 			type = 20;
+		}
+		if (strcmp(argv[1], "goal_info_pub") == 0)
+		{
+			type = 21;
+		}
+		if (strcmp(argv[1], "goal_info_sub") == 0)
+		{
+			type = 22;
+		}
+		if (strcmp(argv[1], "goal_info_tools") == 0)
+		{
+			type = 23;
 		}
 	}
 	int num_bytes = 0;
@@ -272,7 +288,7 @@ int main(int argc, char** argv)
 		case 11:
 		{
 			ImageTools image_tools;
-			if (image_tools.init())
+			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name"))
 			{
 				image_tools.run();
 			}
@@ -354,6 +370,33 @@ int main(int argc, char** argv)
 		{
 			PolygonArrayTools tools;
 			if (tools.init())
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 21:
+		{
+			GoalInfoPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 22:
+		{
+			GoalInfoSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 23:
+		{
+			GoalInfoTools tools;
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name"))
 			{
 				tools.run();
 			}

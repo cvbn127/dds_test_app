@@ -3,17 +3,17 @@
 #include <memory>
 #include <string>
 
-#include "ImageSubscriber.h"
-#include "ImagePublisher.h"
+#include "GoalInfoSubscriber.h"
+#include "GoalInfoPublisher.h"
 
-class ImageTools
+class GoalInfoTools
 {
     public:
-        ~ImageTools();
+        ~GoalInfoTools();
         bool init(const std::string& file_path, const std::string &profile_name);
         void run();
     private:
         eprosima::fastrtps::Participant *participant = nullptr;
-        std::unique_ptr<ImagePublisher> publisher;
-        std::unique_ptr<ImageSubscriber> subscriber;
+        std::unique_ptr<GoalInfoPublisher> publisher;
+        std::unique_ptr<GoalInfoSubscriber> subscriber;
 };

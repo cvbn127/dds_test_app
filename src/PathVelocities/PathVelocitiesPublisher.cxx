@@ -65,7 +65,9 @@ bool PathVelocitiesPublisher::init(int rate)
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
     Wparam.topic.topicDataType = myType.getName();  //This type MUST be registered
-    Wparam.topic.topicName = "PathVelocities_pub";
+    // Wparam.topic.topicName = "path_velocities_pub";
+    Wparam.topic.topicName = "route_task";
+
     Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     Wparam.qos.m_publishMode.kind = eprosima::fastrtps::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
 
@@ -112,6 +114,11 @@ void PathVelocitiesPublisher::run()
     // Publication code
 
     gis_rtk_msgs::msg::PathVelocities st;
+
+    
+    std::vector<gis_rtk_msgs::msg::PointVelocity> points(7);
+    st.path_velocities(points);
+
     // uint32_t w = 100;
     // uint32_t h = 100;
     // uint32_t size = w * h;

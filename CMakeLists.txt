@@ -12,7 +12,11 @@ find_package(fastrtps REQUIRED)
 
 set(MESSAGES_PATH /volumes/fastrtps_gen/fastrtps_gen/sources)
 
-
+message(STATUS "Configuring action_msgs...")
+file(GLOB_RECURSE ACTION_MSGS_SRCS ${MESSAGES_PATH}/action_msgs/msg/*.cxx)
+add_library(Action_msgs_lib ${ACTION_MSGS_SRCS})
+target_link_libraries(Action_msgs_lib fastcdr fastrtps)
+target_include_directories(Action_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/action_msgs/msg )
 
 message(STATUS "Configuring builtin_interfaces...")
 file(GLOB_RECURSE BUILTIN_INTERFACES_SRCS ${MESSAGES_PATH}/builtin_interfaces/msg/*.cxx)
@@ -114,6 +118,16 @@ add_library(PolygonArray_pub_sub
 target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps GisRtk_msgs_lib)
 target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
 
+
+add_library(GoalInfo_pub_sub
+    src/GoalInfo/GoalInfoPublisher.cxx
+    src/GoalInfo/GoalInfoSubscriber.cxx
+    src/GoalInfo/GoalInfoTools.cxx
+)
+target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps Action_msgs_lib)
+target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
+
+
 add_executable(TestApp src/main.cxx)
 # target_link_libraries(TestApp fastcdr fastrtps
 #     Geometry_msgs_lib
@@ -142,4 +156,7 @@ target_link_libraries(TestApp fastcdr fastrtps
     GisRtk_msgs_lib
     PolygonArray_pub_sub
     PathVelocities_pub_sub
+
+    Action_msgs_lib
+    GoalInfo_pub_sub
 )
