@@ -67,6 +67,11 @@ add_library(UniqueIdentifier_msgs_lib ${UNIQUE_IDENTIFIER_MSGS_SRCS})
 target_link_libraries(UniqueIdentifier_msgs_lib fastcdr fastrtps)
 target_include_directories(UniqueIdentifier_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/unique_identifier_msgs/msg )
 
+message(STATUS "Configuring geographic_msgs...")
+file(GLOB_RECURSE GEOGRAPHIC_MSGS_SRCS ${MESSAGES_PATH}/geographic_msgs/msg/*.cxx)
+add_library(Geographic_msgs_lib ${GEOGRAPHIC_MSGS_SRCS})
+target_link_libraries(Geographic_msgs_lib fastcdr fastrtps)
+target_include_directories(Geographic_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/geographic_msgs/msg )
 
 
 add_library(String_pub_sub
@@ -120,7 +125,7 @@ add_library(RTPRouteTask_pub_sub
     src/RTPRouteTask/RTPRouteTaskSubscriber.cxx
     src/RTPRouteTask/RTPRouteTaskTools.cxx
 )
-target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib)
+target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib Rtp_msgs_lib)
 target_include_directories(RTPRouteTask_pub_sub PUBLIC include/RTPRouteTask)
 
 # add_library(PolygonArray_pub_sub
@@ -140,6 +145,13 @@ add_library(GoalInfo_pub_sub
 target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps Builtin_interfaces_lib Action_msgs_lib)
 target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
 
+add_library(GeoPoseStamped_pub_sub
+    src/GeoPoseStamped/GeoPoseStampedPublisher.cxx
+    src/GeoPoseStamped/GeoPoseStampedSubscriber.cxx
+    src/GeoPoseStamped/GeoPoseStampedTools.cxx
+)
+target_link_libraries(GeoPoseStamped_pub_sub fastcdr fastrtps Builtin_interfaces_lib Geographic_msgs_lib)
+target_include_directories(GeoPoseStamped_pub_sub PUBLIC include/GeoPoseStamped)
 
 add_executable(TestApp src/main.cxx)
 # target_link_libraries(TestApp fastcdr fastrtps
@@ -169,10 +181,13 @@ target_link_libraries(TestApp fastcdr fastrtps
     Image_pub_sub
 
     GisRtk_msgs_lib
-    # PolygonArray_pub_sub
+    Rtp_msgs_lib
     RTPRouteTask_pub_sub
 
     Action_msgs_lib
     GoalInfo_pub_sub
     UniqueIdentifier_msgs_lib 
+
+    Geographic_msgs_lib
+    GeoPoseStamped_pub_sub
 )
