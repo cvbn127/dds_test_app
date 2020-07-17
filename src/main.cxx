@@ -40,13 +40,13 @@
 #include "Image/ImageSubscriber.h"
 #include "Image/ImageTools.h"
 
-// #include "PathVelocities/PathVelocitiesPublisher.h"
-// #include "PathVelocities/PathVelocitiesSubscriber.h"
-// #include "PathVelocities/PathVelocitiesTools.h"
+#include "RTPRouteTask/RTPRouteTaskPublisher.h"
+#include "RTPRouteTask/RTPRouteTaskSubscriber.h"
+#include "RTPRouteTask/RTPRouteTaskTools.h"
 
-#include "PolygonArray/PolygonArrayPublisher.h"
-#include "PolygonArray/PolygonArraySubscriber.h"
-#include "PolygonArray/PolygonArrayTools.h"
+// #include "PolygonArray/PolygonArrayPublisher.h"
+// #include "PolygonArray/PolygonArraySubscriber.h"
+// #include "PolygonArray/PolygonArrayTools.h"
 
 #include "GoalInfo/GoalInfoPublisher.h"
 #include "GoalInfo/GoalInfoSubscriber.h"
@@ -123,30 +123,30 @@ int main(int argc, char** argv)
 		{
 			type = 14;
 		}
-		// if (strcmp(argv[1], "path_velocities_pub") == 0)
-		// {
-		// 	type = 15;
-		// }
-		// if (strcmp(argv[1], "path_velocities_sub") == 0)
-		// {
-		// 	type = 16;
-		// }
-		// if (strcmp(argv[1], "path_velocities_tools") == 0)
-		// {
-		// 	type = 17;
-		// }
-		if (strcmp(argv[1], "polygon_array_pub") == 0)
+		if (strcmp(argv[1], "route_task_pub") == 0)
 		{
-			type = 18;
+			type = 15;
 		}
-		if (strcmp(argv[1], "polygon_array_sub") == 0)
+		if (strcmp(argv[1], "route_task_sub") == 0)
 		{
-			type = 19;
+			type = 16;
 		}
-		if (strcmp(argv[1], "polygon_array_tools") == 0)
+		if (strcmp(argv[1], "route_task_tools") == 0)
 		{
-			type = 20;
+			type = 17;
 		}
+		// if (strcmp(argv[1], "polygon_array_pub") == 0)
+		// {
+		// 	type = 18;
+		// }
+		// if (strcmp(argv[1], "polygon_array_sub") == 0)
+		// {
+		// 	type = 19;
+		// }
+		// if (strcmp(argv[1], "polygon_array_tools") == 0)
+		// {
+		// 	type = 20;
+		// }
 		if (strcmp(argv[1], "goal_info_pub") == 0)
 		{
 			type = 21;
@@ -314,7 +314,7 @@ int main(int argc, char** argv)
 			{
 				pub_topic = argv[3];
 			}
-			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "real_big_data", sub_topic, pub_topic))
+			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
 			{
 				image_tools.run();
 			}
@@ -349,56 +349,66 @@ int main(int argc, char** argv)
 		}
 		case 15:
 		{
-			// PathVelocitiesPublisher pub;
-			// if (pub.init(rate))
-			// {
-			// 	pub.run();
-			// }
-			break;
-		}
-		case 16:
-		{
-			// PathVelocitiesSubscriber sub;
-			// if (sub.init())
-			// {
-			// 	sub.run();
-			// }
-			break;
-		}
-		case 17:
-		{
-			// PathVelocitiesTools tools;
-			// if (tools.init())
-			// {
-			// 	tools.run();
-			// }
-			break;
-		}
-		case 18:
-		{
-			PolygonArrayPublisher pub;
+			RTPRouteTaskPublisher pub;
 			if (pub.init(rate))
 			{
 				pub.run();
 			}
 			break;
 		}
-		case 19:
+		case 16:
 		{
-			PolygonArraySubscriber sub;
+			RTPRouteTaskSubscriber sub;
 			if (sub.init())
 			{
 				sub.run();
 			}
 			break;
 		}
-		case 20:
+		case 17:
 		{
-			PolygonArrayTools tools;
-			if (tools.init())
+			RTPRouteTaskTools tools;
+			std::string sub_topic = "rtp_route_task_test";
+			std::string pub_topic = "rtp_route_task_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
 			{
 				tools.run();
 			}
+			break;
+		}
+		case 18:
+		{
+			// PolygonArrayPublisher pub;
+			// if (pub.init(rate))
+			// {
+			// 	pub.run();
+			// }
+			break;
+		}
+		case 19:
+		{
+			// PolygonArraySubscriber sub;
+			// if (sub.init())
+			// {
+			// 	sub.run();
+			// }
+			break;
+		}
+		case 20:
+		{
+			// PolygonArrayTools tools;
+			// if (tools.init())
+			// {
+			// 	tools.run();
+			// }
 			break;
 		}
 		case 21:
@@ -448,7 +458,7 @@ int main(int argc, char** argv)
 		}
 		case 26:
 		{
-                        std::string sub_topic = "geopose_test";
+      std::string sub_topic = "geopose_test";
 			std::string pub_topic = "geopose_pub";
 			if (argc > 2)
 			{
@@ -459,7 +469,7 @@ int main(int argc, char** argv)
 				pub_topic = argv[3];
 			}
 			GeoPoseStampedTools tools;
-			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "real_big_data", sub_topic, pub_topic))
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
 			{
 				tools.run();
 			}

@@ -55,6 +55,12 @@ add_library(GisRtk_msgs_lib ${GIS_RTK_MSGS_SRCS})
 target_link_libraries(GisRtk_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
 target_include_directories(GisRtk_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/gis_rtk_msgs/msg )
 
+message(STATUS "Configuring gis_rtk_msgs...")
+file(GLOB_RECURSE RTP_MSGS_SRCS ${MESSAGES_PATH}/rtp_msgs/msg/*.cxx)
+add_library(Rtp_msgs_lib ${RTP_MSGS_SRCS})
+target_link_libraries(Rtp_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
+target_include_directories(Rtp_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/rtp_msgs/msg )
+
 message(STATUS "Configuring unique_identifier_msgs...")
 file(GLOB_RECURSE UNIQUE_IDENTIFIER_MSGS_SRCS ${MESSAGES_PATH}/unique_identifier_msgs/msg/*.cxx)
 add_library(UniqueIdentifier_msgs_lib ${UNIQUE_IDENTIFIER_MSGS_SRCS})
@@ -109,21 +115,21 @@ add_library(Image_pub_sub
 target_link_libraries(Image_pub_sub fastcdr fastrtps Builtin_interfaces_lib Sensor_msgs_lib)
 target_include_directories(Image_pub_sub PUBLIC include/Image)
 
-# add_library(PathVelocities_pub_sub
-#     src/PathVelocities/PathVelocitiesPublisher.cxx
-#     src/PathVelocities/PathVelocitiesSubscriber.cxx
-#     src/PathVelocities/PathVelocitiesTools.cxx
-# )
-# target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
-# target_include_directories(PathVelocities_pub_sub PUBLIC include/PathVelocities)
-
-add_library(PolygonArray_pub_sub
-    src/PolygonArray/PolygonArrayPublisher.cxx
-    src/PolygonArray/PolygonArraySubscriber.cxx
-    src/PolygonArray/PolygonArrayTools.cxx
+add_library(RTPRouteTask_pub_sub
+    src/RTPRouteTask/RTPRouteTaskPublisher.cxx
+    src/RTPRouteTask/RTPRouteTaskSubscriber.cxx
+    src/RTPRouteTask/RTPRouteTaskTools.cxx
 )
-target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
-target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
+target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib)
+target_include_directories(RTPRouteTask_pub_sub PUBLIC include/RTPRouteTask)
+
+# add_library(PolygonArray_pub_sub
+#     src/PolygonArray/PolygonArrayPublisher.cxx
+#     src/PolygonArray/PolygonArraySubscriber.cxx
+#     src/PolygonArray/PolygonArrayTools.cxx
+# )
+# target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib)
+# target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
 
 
 add_library(GoalInfo_pub_sub
@@ -163,8 +169,8 @@ target_link_libraries(TestApp fastcdr fastrtps
     Image_pub_sub
 
     GisRtk_msgs_lib
-    PolygonArray_pub_sub
-    # PathVelocities_pub_sub
+    # PolygonArray_pub_sub
+    RTPRouteTask_pub_sub
 
     Action_msgs_lib
     GoalInfo_pub_sub
