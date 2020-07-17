@@ -1,4 +1,4 @@
-#include "ImageTools.h"
+#include "GeoPoseStampedTools.h"
 
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/Domain.h>
@@ -13,7 +13,7 @@ using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
 
-ImageTools::~ImageTools()
+GeoPoseStampedTools::~GeoPoseStampedTools()
 {
     if (participant != nullptr)
     {
@@ -21,7 +21,7 @@ ImageTools::~ImageTools()
     }
 }
 
-bool ImageTools::init(const std::string& file_path, const std::string &profile_name, const std::string &sub_topic_name, const std::string &pub_topic_name)
+bool GeoPoseStampedTools::init(const std::string& file_path, const std::string &profile_name, const std::string &sub_topic_name, const std::string &pub_topic_name)
 {
     if (XMLP_ret::XML_OK != XMLProfileManager::loadXMLFile(file_path))
     {
@@ -30,8 +30,8 @@ bool ImageTools::init(const std::string& file_path, const std::string &profile_n
     }
     participant = Domain::createParticipant(profile_name);
 
-    subscriber = std::make_unique<ImageSubscriber>(participant);
-    publisher = std::make_unique<ImagePublisher>(participant);
+    subscriber = std::make_unique<GeoPoseStampedSubscriber>(participant);
+    publisher = std::make_unique<GeoPoseStampedPublisher>(participant);
 
     bool result = subscriber->init(sub_topic_name);
     if (!result)
@@ -49,13 +49,13 @@ bool ImageTools::init(const std::string& file_path, const std::string &profile_n
         //auto duration = now - last_received_timepoint;
         //last_received_timepoint = now;
         //std::cout << "time since last message(ms): " << (std::chrono::duration_cast<std::chrono::milliseconds>(duration)).count() << std::endl;
-        // publisher->publish(msg);
-        publisher->update_message(msg);
+        publisher->publish(msg);
+        //publisher->update_message(msg);
     });    
     return result;
 }
 
-void ImageTools::run()
+void GeoPoseStampedTools::run()
 {
     auto future = std::async(std::launch::async, [this](){ publisher->run(); });
     subscriber->run();

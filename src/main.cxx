@@ -52,6 +52,10 @@
 #include "GoalInfo/GoalInfoSubscriber.h"
 #include "GoalInfo/GoalInfoTools.h"
 
+#include "GeoPoseStamped/GeoPoseStampedPublisher.h"
+#include "GeoPoseStamped/GeoPoseStampedSubscriber.h"
+#include "GeoPoseStamped/GeoPoseStampedTools.h"
+
 #include <fastrtps/Domain.h>
 
 using namespace eprosima;
@@ -155,13 +159,25 @@ int main(int argc, char** argv)
 		{
 			type = 23;
 		}
+		if (strcmp(argv[1], "geo_pose_pub") == 0)
+		{
+			type = 24;
+		}
+		if (strcmp(argv[1], "geo_pose_sub") == 0)
+		{
+			type = 25;
+		}
+		if (strcmp(argv[1], "geo_pose_tools") == 0)
+		{
+			type = 26;
+		}
 	}
 	int num_bytes = 0;
-	if (argc >= 3)
+	if (argc >= 4)
 	{
 		try
 		{
-			num_bytes = atoi(argv[2]);
+			num_bytes = atoi(argv[3]);
 		}
 		catch(...)
 		{
@@ -169,11 +185,11 @@ int main(int argc, char** argv)
 		}
 	};
 	int rate = 1;
-	if (argc == 4)
+	if (argc == 3)
 	{
 		try 
 		{
-			rate = atoi(argv[3]);
+			rate = atoi(argv[2]);
 		}
 		catch(...)
 		{
@@ -298,7 +314,7 @@ int main(int argc, char** argv)
 			{
 				pub_topic = argv[3];
 			}
-			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "real_big_data", sub_topic, pub_topic))
 			{
 				image_tools.run();
 			}
@@ -407,6 +423,43 @@ int main(int argc, char** argv)
 		{
 			GoalInfoTools tools;
 			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name"))
+			{
+				tools.run();
+			}
+			break;
+		}
+                case 24:
+		{
+			GeoPoseStampedPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 25:
+		{
+			GeoPoseStampedSubscriber sub;
+			if (sub.init("/atlans_geopose"))
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 26:
+		{
+                        std::string sub_topic = "geopose_test";
+			std::string pub_topic = "geopose_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			GeoPoseStampedTools tools;
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "real_big_data", sub_topic, pub_topic))
 			{
 				tools.run();
 			}

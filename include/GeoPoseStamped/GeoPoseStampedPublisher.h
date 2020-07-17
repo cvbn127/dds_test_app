@@ -20,23 +20,23 @@
  */
 
 
-#ifndef _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_
-#define _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_
+#ifndef _GEOGRAPHIC_MSGS_MSG_GeoPoseStamped_PUBLISHER_H_
+#define _GEOGRAPHIC_MSGS_MSG_GeoPoseStamped_PUBLISHER_H_
 
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/publisher/PublisherListener.h>
 
-#include "ImagePubSubTypes.h"
+#include "GeoPoseStampedPubSubTypes.h"
 
-class ImagePublisher
+class GeoPoseStampedPublisher
 {
 public:
-	ImagePublisher(eprosima::fastrtps::Participant *participant = nullptr);
-	virtual ~ImagePublisher();
-	bool init(int rate, const std::string &topic_name = "image_pub", const std::string &profile_name = "image-pub-profile");
+	GeoPoseStampedPublisher(eprosima::fastrtps::Participant *participant = nullptr);
+	virtual ~GeoPoseStampedPublisher();
+	bool init(int rate, const std::string &topic_name = "geo_pose_pub", const std::string &profile_name = "geo-pose-pub-profile");
 	void run();
-	void publish(const sensor_msgs::msg::Image &msg);
-	void update_message(const sensor_msgs::msg::Image &msg);
+	void publish(const geographic_msgs::msg::GeoPoseStamped &msg);
+	void update_message(const geographic_msgs::msg::GeoPoseStamped &msg);
 
 private:
 	eprosima::fastrtps::Participant *mp_participant;
@@ -46,7 +46,7 @@ private:
 	bool should_delete_participant = false;
 	bool is_type_registred = false;
 
-	sensor_msgs::msg::Image latest_message;
+	geographic_msgs::msg::GeoPoseStamped latest_message;
 
 	class PubListener : public eprosima::fastrtps::PublisherListener
 	{
@@ -56,7 +56,7 @@ private:
 		void onPublicationMatched(eprosima::fastrtps::Publisher* pub,eprosima::fastrtps::rtps::MatchingInfo& info);
 		int n_matched;
 	} m_listener;
-	sensor_msgs::msg::ImagePubSubType myType;
+	geographic_msgs::msg::GeoPoseStampedPubSubType myType;
 };
 
 #endif // _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_
