@@ -109,13 +109,13 @@ add_library(Image_pub_sub
 target_link_libraries(Image_pub_sub fastcdr fastrtps Builtin_interfaces_lib Sensor_msgs_lib)
 target_include_directories(Image_pub_sub PUBLIC include/Image)
 
-add_library(PathVelocities_pub_sub
-    src/PathVelocities/PathVelocitiesPublisher.cxx
-    src/PathVelocities/PathVelocitiesSubscriber.cxx
-    src/PathVelocities/PathVelocitiesTools.cxx
-)
-target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
-target_include_directories(PathVelocities_pub_sub PUBLIC include/PathVelocities)
+# add_library(PathVelocities_pub_sub
+#     src/PathVelocities/PathVelocitiesPublisher.cxx
+#     src/PathVelocities/PathVelocitiesSubscriber.cxx
+#     src/PathVelocities/PathVelocitiesTools.cxx
+# )
+# target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
+# target_include_directories(PathVelocities_pub_sub PUBLIC include/PathVelocities)
 
 add_library(PolygonArray_pub_sub
     src/PolygonArray/PolygonArrayPublisher.cxx
@@ -164,7 +164,7 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     GisRtk_msgs_lib
     PolygonArray_pub_sub
-    PathVelocities_pub_sub
+    # PathVelocities_pub_sub
 
     Action_msgs_lib
     GoalInfo_pub_sub

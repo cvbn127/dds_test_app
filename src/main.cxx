@@ -40,9 +40,9 @@
 #include "Image/ImageSubscriber.h"
 #include "Image/ImageTools.h"
 
-#include "PathVelocities/PathVelocitiesPublisher.h"
-#include "PathVelocities/PathVelocitiesSubscriber.h"
-#include "PathVelocities/PathVelocitiesTools.h"
+// #include "PathVelocities/PathVelocitiesPublisher.h"
+// #include "PathVelocities/PathVelocitiesSubscriber.h"
+// #include "PathVelocities/PathVelocitiesTools.h"
 
 #include "PolygonArray/PolygonArrayPublisher.h"
 #include "PolygonArray/PolygonArraySubscriber.h"
@@ -123,18 +123,18 @@ int main(int argc, char** argv)
 		{
 			type = 14;
 		}
-		if (strcmp(argv[1], "path_velocities_pub") == 0)
-		{
-			type = 15;
-		}
-		if (strcmp(argv[1], "path_velocities_sub") == 0)
-		{
-			type = 16;
-		}
-		if (strcmp(argv[1], "path_velocities_tools") == 0)
-		{
-			type = 17;
-		}
+		// if (strcmp(argv[1], "path_velocities_pub") == 0)
+		// {
+		// 	type = 15;
+		// }
+		// if (strcmp(argv[1], "path_velocities_sub") == 0)
+		// {
+		// 	type = 16;
+		// }
+		// if (strcmp(argv[1], "path_velocities_tools") == 0)
+		// {
+		// 	type = 17;
+		// }
 		if (strcmp(argv[1], "polygon_array_pub") == 0)
 		{
 			type = 18;
@@ -349,29 +349,29 @@ int main(int argc, char** argv)
 		}
 		case 15:
 		{
-			PathVelocitiesPublisher pub;
-			if (pub.init(rate))
-			{
-				pub.run();
-			}
+			// PathVelocitiesPublisher pub;
+			// if (pub.init(rate))
+			// {
+			// 	pub.run();
+			// }
 			break;
 		}
 		case 16:
 		{
-			PathVelocitiesSubscriber sub;
-			if (sub.init())
-			{
-				sub.run();
-			}
+			// PathVelocitiesSubscriber sub;
+			// if (sub.init())
+			// {
+			// 	sub.run();
+			// }
 			break;
 		}
 		case 17:
 		{
-			PathVelocitiesTools tools;
-			if (tools.init())
-			{
-				tools.run();
-			}
+			// PathVelocitiesTools tools;
+			// if (tools.init())
+			// {
+			// 	tools.run();
+			// }
 			break;
 		}
 		case 18:
