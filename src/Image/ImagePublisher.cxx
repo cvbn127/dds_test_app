@@ -45,7 +45,7 @@ ImagePublisher::~ImagePublisher()
     }
 }
 
-bool ImagePublisher::init(int rate)
+bool ImagePublisher::init(int rate, const std::string &topic_name)
 {
     m_rate = rate;
     // Create RTPSParticipant
@@ -68,7 +68,7 @@ bool ImagePublisher::init(int rate)
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
     Wparam.topic.topicDataType = myType.getName();  //This type MUST be registered
-    Wparam.topic.topicName = "image_pub";
+    Wparam.topic.topicName = topic_name;
     Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     Wparam.qos.m_publishMode.kind = eprosima::fastrtps::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
 
@@ -105,8 +105,25 @@ void ImagePublisher::publish(const sensor_msgs::msg::Image &msg)
     mp_publisher->write(const_cast<sensor_msgs::msg::Image *>(&msg));
 }
 
+void ImagePublisher::update_message(const sensor_msgs::msg::Image &msg)
+{
+    latest_message = msg;
+}
+
 void ImagePublisher::run()
 {
+    uint32_t w = 1000;
+    uint32_t h = 1000;
+    uint32_t size = w * h;
+    std::vector<uint8_t> data(size);
+    for(int i = 0; i < size; i++)
+    {
+        data[i] = 0;
+    }
+    latest_message.height() = h;
+    latest_message.width() = w;
+    latest_message.data(data);
+
     while(m_listener.n_matched == 0)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(250)); // Sleep 250 ms
@@ -114,31 +131,10 @@ void ImagePublisher::run()
 
     // Publication code
 
-    sensor_msgs::msg::Image st;
-    uint32_t w = 100;
-    uint32_t h = 100;
-    uint32_t size = w * h;
-    std::vector<uint8_t> data(size);
-    for(int i = 0; i < size; i++)
-    {
-        data[i] = 0;
-    }
-    st.height() = h;
-    st.width() = w;
-    st.data(data);
-    // st.header().frame_id() = std::string("Hi!");
-    // st.child_frame_id() = std::string("child");
-    // // st.header().stamp().sec() = 127;
-    // st.pose().covariance()[0] = 42.0;
-    // st.pose().covariance()[1] = 43.0;
-    // st.pose().pose().position().x() = 11;
-    // st.pose().pose().orientation().w() = 31;
-    
-    // st.twist().covariance()[2] = 27.9;
 
     /* Initialize your structure here */
 
-    size_t sleep_time = (1.0 / m_rate) * 100.0;
+    size_t sleep_time = (1.0 / m_rate) * 1000.0;
     // size_t sleep_time = (1.0 / m_rate) * 1000.0;
     // size_t sleep_time = 360000;
 
@@ -146,7 +142,7 @@ void ImagePublisher::run()
     do
     {
         // st.header().stamp().sec() = std::chrono::system_clock::now().time_since_epoch().count();
-        mp_publisher->write(&st);  ++msgsent;
+        mp_publisher->write(&latest_message);  ++msgsent;
         std::cout << "Sending sample, count=" << msgsent << "" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
     } while(true);

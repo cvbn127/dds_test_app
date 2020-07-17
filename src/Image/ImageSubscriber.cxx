@@ -49,7 +49,7 @@ void ImageSubscriber::set_callback(std::function<void(const sensor_msgs::msg::Im
     callback = cb;
 }
 
-bool ImageSubscriber::init()
+bool ImageSubscriber::init(const std::string &topic_name)
 {
     if(mp_participant == nullptr)
     {
@@ -70,7 +70,8 @@ bool ImageSubscriber::init()
     SubscriberAttributes Rparam;
     Rparam.topic.topicKind = NO_KEY;
     Rparam.topic.topicDataType = myType.getName(); //Must be registered before the creation of the subscriber
-    Rparam.topic.topicName = "image_test";
+    //Rparam.topic.topicName = "image_test";
+    Rparam.topic.topicName = topic_name;
     Rparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     // Rparam.topic.topicName = "Image_pub";
     mp_subscriber = Domain::createSubscriber(mp_participant,Rparam, static_cast<SubscriberListener*>(&m_listener));

@@ -116,7 +116,7 @@ void PathVelocitiesPublisher::run()
     gis_rtk_msgs::msg::PathVelocities st;
 
     
-    std::vector<gis_rtk_msgs::msg::PointVelocity> points(7);
+    std::vector<gis_rtk_msgs::msg::PointVelocity> points(3);
     st.path_velocities(points);
 
     // uint32_t w = 100;
@@ -142,9 +142,9 @@ void PathVelocitiesPublisher::run()
 
     /* Initialize your structure here */
 
-    size_t sleep_time = (1.0 / m_rate) * 100.0;
+    // size_t sleep_time = (1.0 / m_rate) * 100.0;
     // size_t sleep_time = (1.0 / m_rate) * 1000.0;
-    // size_t sleep_time = 360000;
+    size_t sleep_time = 360000;
 
     int msgsent = 0;
     do

@@ -33,15 +33,19 @@ class ImagePublisher
 public:
 	ImagePublisher(eprosima::fastrtps::Participant *participant = nullptr);
 	virtual ~ImagePublisher();
-	bool init(int rate);
+	bool init(int rate, const std::string &topic_name = "image_pub");
 	void run();
 	void publish(const sensor_msgs::msg::Image &msg);
+	void update_message(const sensor_msgs::msg::Image &msg);
+
 private:
 	eprosima::fastrtps::Participant *mp_participant;
 	eprosima::fastrtps::Publisher *mp_publisher;
 
 	int m_rate;
 	bool should_delete_participant = false;
+
+	sensor_msgs::msg::Image latest_message;
 
 	class PubListener : public eprosima::fastrtps::PublisherListener
 	{

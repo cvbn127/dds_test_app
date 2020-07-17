@@ -288,7 +288,17 @@ int main(int argc, char** argv)
 		case 11:
 		{
 			ImageTools image_tools;
-			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name"))
+			std::string sub_topic = "image_test";
+			std::string pub_topic = "image_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
 			{
 				image_tools.run();
 			}

@@ -10,7 +10,8 @@ find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
 
-set(MESSAGES_PATH /volumes/fastrtps_gen/fastrtps_gen/sources)
+#set(MESSAGES_PATH /volumes/fastrtps_gen/fastrtps_gen/sources)
+set(MESSAGES_PATH /volumes/fastcdr-ros-msgs-develop)
 
 message(STATUS "Configuring action_msgs...")
 file(GLOB_RECURSE ACTION_MSGS_SRCS ${MESSAGES_PATH}/action_msgs/msg/*.cxx)
@@ -51,8 +52,14 @@ target_include_directories(Sensor_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PA
 message(STATUS "Configuring gis_rtk_msgs...")
 file(GLOB_RECURSE GIS_RTK_MSGS_SRCS ${MESSAGES_PATH}/gis_rtk_msgs/msg/*.cxx)
 add_library(GisRtk_msgs_lib ${GIS_RTK_MSGS_SRCS})
-target_link_libraries(GisRtk_msgs_lib fastcdr fastrtps)
+target_link_libraries(GisRtk_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
 target_include_directories(GisRtk_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/gis_rtk_msgs/msg )
+
+message(STATUS "Configuring unique_identifier_msgs...")
+file(GLOB_RECURSE UNIQUE_IDENTIFIER_MSGS_SRCS ${MESSAGES_PATH}/unique_identifier_msgs/msg/*.cxx)
+add_library(UniqueIdentifier_msgs_lib ${UNIQUE_IDENTIFIER_MSGS_SRCS})
+target_link_libraries(UniqueIdentifier_msgs_lib fastcdr fastrtps)
+target_include_directories(UniqueIdentifier_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/unique_identifier_msgs/msg )
 
 
 
@@ -68,7 +75,7 @@ add_library(Odometry_pub_sub
     src/Odometry/OdometryPublisher.cxx 
     src/Odometry/OdometrySubscriber.cxx
 )
-target_link_libraries(Odometry_pub_sub fastcdr fastrtps Nav_msgs_lib)
+target_link_libraries(Odometry_pub_sub fastcdr fastrtps Builtin_interfaces_lib Nav_msgs_lib)
 target_include_directories(Odometry_pub_sub PUBLIC include/Odometry)
 
 add_library(OccupancyGrid_pub_sub
@@ -76,7 +83,7 @@ add_library(OccupancyGrid_pub_sub
     src/OccupancyGrid/OccupancyGridSubscriber.cxx
     src/OccupancyGrid/OccupancyGridTools.cxx
 )
-target_link_libraries(OccupancyGrid_pub_sub fastcdr fastrtps Nav_msgs_lib)
+target_link_libraries(OccupancyGrid_pub_sub fastcdr fastrtps Builtin_interfaces_lib Nav_msgs_lib)
 target_include_directories(OccupancyGrid_pub_sub PUBLIC include/OccupancyGrid)
 
 
@@ -84,14 +91,14 @@ add_library(Pose_pub_sub
     src/Pose/PosePublisher.cxx 
     src/Pose/PoseSubscriber.cxx
 )
-target_link_libraries(Pose_pub_sub fastcdr fastrtps Geometry_msgs_lib)
+target_link_libraries(Pose_pub_sub fastcdr fastrtps Builtin_interfaces_lib Geometry_msgs_lib)
 target_include_directories(Pose_pub_sub PUBLIC include/Pose)
 
 add_library(Polygon_pub_sub
     src/Polygon/PolygonPublisher.cxx
     src/Polygon/PolygonSubscriber.cxx
 )
-target_link_libraries(Polygon_pub_sub fastcdr fastrtps Geometry_msgs_lib)
+target_link_libraries(Polygon_pub_sub fastcdr fastrtps Builtin_interfaces_lib Geometry_msgs_lib)
 target_include_directories(Polygon_pub_sub PUBLIC include/Polygon)
 
 add_library(Image_pub_sub
@@ -99,7 +106,7 @@ add_library(Image_pub_sub
     src/Image/ImageSubscriber.cxx
     src/Image/ImageTools.cxx
 )
-target_link_libraries(Image_pub_sub fastcdr fastrtps Sensor_msgs_lib)
+target_link_libraries(Image_pub_sub fastcdr fastrtps Builtin_interfaces_lib Sensor_msgs_lib)
 target_include_directories(Image_pub_sub PUBLIC include/Image)
 
 add_library(PathVelocities_pub_sub
@@ -107,7 +114,7 @@ add_library(PathVelocities_pub_sub
     src/PathVelocities/PathVelocitiesSubscriber.cxx
     src/PathVelocities/PathVelocitiesTools.cxx
 )
-target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps GisRtk_msgs_lib)
+target_link_libraries(PathVelocities_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
 target_include_directories(PathVelocities_pub_sub PUBLIC include/PathVelocities)
 
 add_library(PolygonArray_pub_sub
@@ -115,7 +122,7 @@ add_library(PolygonArray_pub_sub
     src/PolygonArray/PolygonArraySubscriber.cxx
     src/PolygonArray/PolygonArrayTools.cxx
 )
-target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps GisRtk_msgs_lib)
+target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
 target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
 
 
@@ -124,7 +131,7 @@ add_library(GoalInfo_pub_sub
     src/GoalInfo/GoalInfoSubscriber.cxx
     src/GoalInfo/GoalInfoTools.cxx
 )
-target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps Action_msgs_lib)
+target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps Builtin_interfaces_lib Action_msgs_lib)
 target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
 
 
@@ -138,6 +145,8 @@ add_executable(TestApp src/main.cxx)
 # )
 
 target_link_libraries(TestApp fastcdr fastrtps
+    Builtin_interfaces_lib 
+
     Std_msgs_lib
     String_pub_sub
 
@@ -159,4 +168,5 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     Action_msgs_lib
     GoalInfo_pub_sub
+    UniqueIdentifier_msgs_lib 
 )

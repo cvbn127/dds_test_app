@@ -36,7 +36,7 @@ public:
 	ImageSubscriber(eprosima::fastrtps::Participant *participant = nullptr);
 	virtual ~ImageSubscriber();
 	void set_callback(std::function<void(const sensor_msgs::msg::Image&)> cb);
-	bool init();
+	bool init(const std::string &topic_name = "image_test");
 	void run();
 private:
 	eprosima::fastrtps::Participant *mp_participant;
