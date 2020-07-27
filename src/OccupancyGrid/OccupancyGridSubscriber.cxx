@@ -68,7 +68,7 @@ bool OccupancyGridSubscriber::init()
     Rparam.topic.topicKind = NO_KEY;
     Rparam.topic.topicDataType = myType.getName(); //Must be registered before the creation of the subscriber
 //    Rparam.topic.topicName = "OccupancyGrid";
-    Rparam.topic.topicName = "occupancy_test";
+    //Rparam.topic.topicName = "occupancy_test";
     Rparam.topic.topicName = "occupancy_grid";
     mp_subscriber = Domain::createSubscriber(mp_participant,Rparam, static_cast<SubscriberListener*>(&m_listener));
     if(mp_subscriber == nullptr)

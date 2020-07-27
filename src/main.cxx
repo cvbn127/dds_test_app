@@ -44,9 +44,17 @@
 #include "RTPRouteTask/RTPRouteTaskSubscriber.h"
 #include "RTPRouteTask/RTPRouteTaskTools.h"
 
-// #include "PolygonArray/PolygonArrayPublisher.h"
-// #include "PolygonArray/PolygonArraySubscriber.h"
-// #include "PolygonArray/PolygonArrayTools.h"
+#include "RegionArray/RegionArrayPublisher.h"
+#include "RegionArray/RegionArraySubscriber.h"
+#include "RegionArray/RegionArrayTools.h"
+
+#include "ObjectsArray/ObjectsArrayPublisher.h"
+#include "ObjectsArray/ObjectsArraySubscriber.h"
+#include "ObjectsArray/ObjectsArrayTools.h"
+
+#include "PoseArray/PoseArrayPublisher.h"
+#include "PoseArray/PoseArraySubscriber.h"
+#include "PoseArray/PoseArrayTools.h"
 
 #include "GoalInfo/GoalInfoPublisher.h"
 #include "GoalInfo/GoalInfoSubscriber.h"
@@ -55,6 +63,10 @@
 #include "GeoPoseStamped/GeoPoseStampedPublisher.h"
 #include "GeoPoseStamped/GeoPoseStampedSubscriber.h"
 #include "GeoPoseStamped/GeoPoseStampedTools.h"
+
+#include "SHRouteTask/SHRouteTaskPublisher.h"
+#include "SHRouteTask/SHRouteTaskSubscriber.h"
+#include "SHRouteTask/SHRouteTaskTools.h"
 
 #include <fastrtps/Domain.h>
 
@@ -123,30 +135,30 @@ int main(int argc, char** argv)
 		{
 			type = 14;
 		}
-		if (strcmp(argv[1], "route_task_pub") == 0)
+		if (strcmp(argv[1], "rtp_route_task_pub") == 0)
 		{
 			type = 15;
 		}
-		if (strcmp(argv[1], "route_task_sub") == 0)
+		if (strcmp(argv[1], "rtp_route_task_sub") == 0)
 		{
 			type = 16;
 		}
-		if (strcmp(argv[1], "route_task_tools") == 0)
+		if (strcmp(argv[1], "rtp_route_task_tools") == 0)
 		{
 			type = 17;
 		}
-		// if (strcmp(argv[1], "polygon_array_pub") == 0)
-		// {
-		// 	type = 18;
-		// }
-		// if (strcmp(argv[1], "polygon_array_sub") == 0)
-		// {
-		// 	type = 19;
-		// }
-		// if (strcmp(argv[1], "polygon_array_tools") == 0)
-		// {
-		// 	type = 20;
-		// }
+		if (strcmp(argv[1], "region_array_pub") == 0)
+		{
+			type = 18;
+		}
+		if (strcmp(argv[1], "region_array_sub") == 0)
+		{
+			type = 19;
+		}
+		if (strcmp(argv[1], "region_array_tools") == 0)
+		{
+			type = 20;
+		}
 		if (strcmp(argv[1], "goal_info_pub") == 0)
 		{
 			type = 21;
@@ -170,6 +182,42 @@ int main(int argc, char** argv)
 		if (strcmp(argv[1], "geo_pose_tools") == 0)
 		{
 			type = 26;
+		}
+		if (strcmp(argv[1], "sh_route_task_pub") == 0)
+		{
+			type = 27;
+		}
+		if (strcmp(argv[1], "sh_route_task_sub") == 0)
+		{
+			type = 28;
+		}
+		if (strcmp(argv[1], "sh_route_task_tools") == 0)
+		{
+			type = 29;
+		}
+		if (strcmp(argv[1], "objects_array_pub") == 0)
+		{
+			type = 30;
+		}
+		if (strcmp(argv[1], "objects_array_sub") == 0)
+		{
+			type = 31;
+		}
+		if (strcmp(argv[1], "objects_array_tools") == 0)
+		{
+			type = 32;
+		}
+		if (strcmp(argv[1], "pose_array_pub") == 0)
+		{
+			type = 33;
+		}
+		if (strcmp(argv[1], "pose_array_sub") == 0)
+		{
+			type = 34;
+		}
+		if (strcmp(argv[1], "pose_array_tools") == 0)
+		{
+			type = 35;
 		}
 	}
 	int num_bytes = 0;
@@ -386,29 +434,39 @@ int main(int argc, char** argv)
 		}
 		case 18:
 		{
-			// PolygonArrayPublisher pub;
-			// if (pub.init(rate))
-			// {
-			// 	pub.run();
-			// }
+			RegionArrayPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
 			break;
 		}
 		case 19:
 		{
-			// PolygonArraySubscriber sub;
-			// if (sub.init())
-			// {
-			// 	sub.run();
-			// }
+			RegionArraySubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
 			break;
 		}
 		case 20:
 		{
-			// PolygonArrayTools tools;
-			// if (tools.init())
-			// {
-			// 	tools.run();
-			// }
+			RegionArrayTools tools;
+			std::string sub_topic = "region_array_test";
+			std::string pub_topic = "region_array_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
 			break;
 		}
 		case 21:
@@ -469,6 +527,117 @@ int main(int argc, char** argv)
 				pub_topic = argv[3];
 			}
 			GeoPoseStampedTools tools;
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 27:
+		{
+			SHRouteTaskPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 28:
+		{
+			SHRouteTaskSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 29:
+		{
+			SHRouteTaskTools tools;
+			std::string sub_topic = "sh_route_task_test";
+			std::string pub_topic = "sh_route_task_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 30:
+		{
+			ObjectsArrayPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 31:
+		{
+			ObjectsArraySubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 32:
+		{
+			ObjectsArrayTools tools;
+			std::string sub_topic = "objects_array_test";
+			std::string pub_topic = "objects_array_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 33:
+		{
+			PoseArrayPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 34:
+		{
+			PoseArraySubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 35:
+		{
+			PoseArrayTools tools;
+			std::string sub_topic = "pose_array_test";
+			std::string pub_topic = "pose_array_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
 			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
 			{
 				tools.run();

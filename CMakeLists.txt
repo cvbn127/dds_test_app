@@ -55,11 +55,17 @@ add_library(GisRtk_msgs_lib ${GIS_RTK_MSGS_SRCS})
 target_link_libraries(GisRtk_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
 target_include_directories(GisRtk_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/gis_rtk_msgs/msg )
 
-message(STATUS "Configuring gis_rtk_msgs...")
+message(STATUS "Configuring rtp_msgs...")
 file(GLOB_RECURSE RTP_MSGS_SRCS ${MESSAGES_PATH}/rtp_msgs/msg/*.cxx)
 add_library(Rtp_msgs_lib ${RTP_MSGS_SRCS})
 target_link_libraries(Rtp_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
 target_include_directories(Rtp_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/rtp_msgs/msg )
+
+message(STATUS "Configuring sh_chassis_msgs...")
+file(GLOB_RECURSE SH_CHASSIS_MSGS_SRCS ${MESSAGES_PATH}/sh_chassis_msgs/msg/*.cxx)
+add_library(ShChassis_msgs_lib ${SH_CHASSIS_MSGS_SRCS})
+target_link_libraries(ShChassis_msgs_lib fastcdr fastrtps Geometry_msgs_lib)
+target_include_directories(ShChassis_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/sh_chassis_msgs/msg )
 
 message(STATUS "Configuring unique_identifier_msgs...")
 file(GLOB_RECURSE UNIQUE_IDENTIFIER_MSGS_SRCS ${MESSAGES_PATH}/unique_identifier_msgs/msg/*.cxx)
@@ -128,14 +134,38 @@ add_library(RTPRouteTask_pub_sub
 target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib Rtp_msgs_lib)
 target_include_directories(RTPRouteTask_pub_sub PUBLIC include/RTPRouteTask)
 
-# add_library(PolygonArray_pub_sub
-#     src/PolygonArray/PolygonArrayPublisher.cxx
-#     src/PolygonArray/PolygonArraySubscriber.cxx
-#     src/PolygonArray/PolygonArrayTools.cxx
-# )
-# target_link_libraries(PolygonArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib)
-# target_include_directories(PolygonArray_pub_sub PUBLIC include/PolygonArray)
 
+add_library(SHRouteTask_pub_sub
+    src/SHRouteTask/SHRouteTaskPublisher.cxx
+    src/SHRouteTask/SHRouteTaskSubscriber.cxx
+    src/SHRouteTask/SHRouteTaskTools.cxx
+)
+target_link_libraries(SHRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib ShChassis_msgs_lib)
+target_include_directories(SHRouteTask_pub_sub PUBLIC include/SHRouteTask)
+
+add_library(RegionArray_pub_sub
+    src/RegionArray/RegionArrayPublisher.cxx
+    src/RegionArray/RegionArraySubscriber.cxx
+    src/RegionArray/RegionArrayTools.cxx
+)
+target_link_libraries(RegionArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
+target_include_directories(RegionArray_pub_sub PUBLIC include/RegionArray)
+
+add_library(ObjectsArray_pub_sub
+    src/ObjectsArray/ObjectsArrayPublisher.cxx
+    src/ObjectsArray/ObjectsArraySubscriber.cxx
+    src/ObjectsArray/ObjectsArrayTools.cxx
+)
+target_link_libraries(ObjectsArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib GisRtk_msgs_lib)
+target_include_directories(ObjectsArray_pub_sub PUBLIC include/ObjectsArray)
+
+add_library(PoseArray_pub_sub
+    src/PoseArray/PoseArrayPublisher.cxx
+    src/PoseArray/PoseArraySubscriber.cxx
+    src/PoseArray/PoseArrayTools.cxx
+)
+target_link_libraries(PoseArray_pub_sub fastcdr fastrtps Builtin_interfaces_lib Geometry_msgs_lib)
+target_include_directories(PoseArray_pub_sub PUBLIC include/PoseArray)
 
 add_library(GoalInfo_pub_sub
     src/GoalInfo/GoalInfoPublisher.cxx
@@ -154,13 +184,6 @@ target_link_libraries(GeoPoseStamped_pub_sub fastcdr fastrtps Builtin_interfaces
 target_include_directories(GeoPoseStamped_pub_sub PUBLIC include/GeoPoseStamped)
 
 add_executable(TestApp src/main.cxx)
-# target_link_libraries(TestApp fastcdr fastrtps
-#     Geometry_msgs_lib
-#     String_lib
-#     String_pub_sub
-#     Odometry_lib
-#     Odometry_pub_sub
-# )
 
 target_link_libraries(TestApp fastcdr fastrtps
     Builtin_interfaces_lib 
@@ -183,6 +206,9 @@ target_link_libraries(TestApp fastcdr fastrtps
     GisRtk_msgs_lib
     Rtp_msgs_lib
     RTPRouteTask_pub_sub
+    
+    ShChassis_msgs_lib
+    SHRouteTask_pub_sub
 
     Action_msgs_lib
     GoalInfo_pub_sub
@@ -190,4 +216,8 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     Geographic_msgs_lib
     GeoPoseStamped_pub_sub
+
+    RegionArray_pub_sub
+    ObjectsArray_pub_sub
+    PoseArray_pub_sub
 )

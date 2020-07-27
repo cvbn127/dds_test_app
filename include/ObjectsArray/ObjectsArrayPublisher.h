@@ -20,23 +20,23 @@
  */
 
 
-#ifndef _GEOGRAPHIC_MSGS_MSG_RTPRouteTask_PUBLISHER_H_
-#define _GEOGRAPHIC_MSGS_MSG_RTPRouteTask_PUBLISHER_H_
+#ifndef _GIS_RTK_MSGS_MSG_ObjectsArray_PUBLISHER_H_
+#define _GIS_RTK_MSGS_MSG_ObjectsArray_PUBLISHER_H_
 
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/publisher/PublisherListener.h>
 
-#include "RTPRouteTaskPubSubTypes.h"
+#include "ObjectsArrayPubSubTypes.h"
 
-class RTPRouteTaskPublisher
+class ObjectsArrayPublisher
 {
 public:
-	RTPRouteTaskPublisher(eprosima::fastrtps::Participant *participant = nullptr);
-	virtual ~RTPRouteTaskPublisher();
-	bool init(int rate, const std::string &topic_name = "rtp_route_task", const std::string &profile_name = "route-task-pub-profile");
+	ObjectsArrayPublisher(eprosima::fastrtps::Participant *participant = nullptr);
+	virtual ~ObjectsArrayPublisher();
+	bool init(int rate, const std::string &topic_name = "objects_array", const std::string &profile_name = "objects-array-pub-profile");
 	void run();
-	void publish(const rtp_msgs::msg::RTPRouteTask &msg);
-	void update_message(const rtp_msgs::msg::RTPRouteTask &msg);
+	void publish(const gis_rtk_msgs::msg::ObjectsArray &msg);
+	void update_message(const gis_rtk_msgs::msg::ObjectsArray &msg);
 
 private:
 	eprosima::fastrtps::Participant *mp_participant;
@@ -46,7 +46,7 @@ private:
 	bool should_delete_participant = false;
 	bool is_type_registred = false;
 
-	rtp_msgs::msg::RTPRouteTask latest_message;
+	gis_rtk_msgs::msg::ObjectsArray latest_message;
 
 	class PubListener : public eprosima::fastrtps::PublisherListener
 	{
@@ -56,7 +56,7 @@ private:
 		void onPublicationMatched(eprosima::fastrtps::Publisher* pub,eprosima::fastrtps::rtps::MatchingInfo& info);
 		int n_matched;
 	} m_listener;
-	rtp_msgs::msg::RTPRouteTaskPubSubType myType;
+	gis_rtk_msgs::msg::ObjectsArrayPubSubType myType;
 };
 
 #endif // _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_

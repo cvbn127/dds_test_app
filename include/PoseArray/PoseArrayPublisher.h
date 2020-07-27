@@ -20,23 +20,23 @@
  */
 
 
-#ifndef _GEOGRAPHIC_MSGS_MSG_RTPRouteTask_PUBLISHER_H_
-#define _GEOGRAPHIC_MSGS_MSG_RTPRouteTask_PUBLISHER_H_
+#ifndef _GEOMETRY_MSGS_MSG_PoseArray_PUBLISHER_H_
+#define _GEOMETRY_MSGS_MSG_PoseArray_PUBLISHER_H_
 
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/publisher/PublisherListener.h>
 
-#include "RTPRouteTaskPubSubTypes.h"
+#include "PoseArrayPubSubTypes.h"
 
-class RTPRouteTaskPublisher
+class PoseArrayPublisher
 {
 public:
-	RTPRouteTaskPublisher(eprosima::fastrtps::Participant *participant = nullptr);
-	virtual ~RTPRouteTaskPublisher();
-	bool init(int rate, const std::string &topic_name = "rtp_route_task", const std::string &profile_name = "route-task-pub-profile");
+	PoseArrayPublisher(eprosima::fastrtps::Participant *participant = nullptr);
+	virtual ~PoseArrayPublisher();
+	bool init(int rate, const std::string &topic_name = "pose_array", const std::string &profile_name = "pose-array-pub-profile");
 	void run();
-	void publish(const rtp_msgs::msg::RTPRouteTask &msg);
-	void update_message(const rtp_msgs::msg::RTPRouteTask &msg);
+	void publish(const geometry_msgs::msg::PoseArray &msg);
+	void update_message(const geometry_msgs::msg::PoseArray &msg);
 
 private:
 	eprosima::fastrtps::Participant *mp_participant;
@@ -46,7 +46,7 @@ private:
 	bool should_delete_participant = false;
 	bool is_type_registred = false;
 
-	rtp_msgs::msg::RTPRouteTask latest_message;
+	geometry_msgs::msg::PoseArray latest_message;
 
 	class PubListener : public eprosima::fastrtps::PublisherListener
 	{
@@ -56,7 +56,7 @@ private:
 		void onPublicationMatched(eprosima::fastrtps::Publisher* pub,eprosima::fastrtps::rtps::MatchingInfo& info);
 		int n_matched;
 	} m_listener;
-	rtp_msgs::msg::RTPRouteTaskPubSubType myType;
+	geometry_msgs::msg::PoseArrayPubSubType myType;
 };
 
 #endif // _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_

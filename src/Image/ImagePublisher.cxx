@@ -135,6 +135,7 @@ void ImagePublisher::run()
     uint32_t h = 100;
     uint32_t size = w * h;
     std::vector<uint8_t> data(size, 0);
+    latest_message.header().frame_id() = std::string("test");
     latest_message.height() = h;
     latest_message.width() = w;
     latest_message.data(data);
