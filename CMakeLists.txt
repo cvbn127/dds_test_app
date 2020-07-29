@@ -11,7 +11,7 @@ find_package(fastrtps REQUIRED)
 
 
 #set(MESSAGES_PATH /volumes/fastrtps_gen/fastrtps_gen/sources)
-set(MESSAGES_PATH /volumes/fastcdr-ros-msgs-develop)
+set(MESSAGES_PATH /volumes/fastcdr-ros-msgs)
 
 message(STATUS "Configuring action_msgs...")
 file(GLOB_RECURSE ACTION_MSGS_SRCS ${MESSAGES_PATH}/action_msgs/msg/*.cxx)
