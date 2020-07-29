@@ -19,6 +19,12 @@ add_library(Action_msgs_lib ${ACTION_MSGS_SRCS})
 target_link_libraries(Action_msgs_lib fastcdr fastrtps)
 target_include_directories(Action_msgs_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/action_msgs/msg )
 
+message(STATUS "Configuring diagnostic_msgs...")
+file(GLOB_RECURSE DIAGNOSTIC_MSGS_SRCS ${MESSAGES_PATH}/diagnostic_msgs/msg/*.cxx)
+add_library(Diagnostic_lib ${DIAGNOSTIC_MSGS_SRCS})
+target_link_libraries(Diagnostic_lib fastcdr fastrtps)
+target_include_directories(Diagnostic_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/diagnostic_msgs/msg )
+
 message(STATUS "Configuring builtin_interfaces...")
 file(GLOB_RECURSE BUILTIN_INTERFACES_SRCS ${MESSAGES_PATH}/builtin_interfaces/msg/*.cxx)
 add_library(Builtin_interfaces_lib ${BUILTIN_INTERFACES_SRCS})
@@ -133,7 +139,6 @@ add_library(RTPRouteTask_pub_sub
 )
 target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps Builtin_interfaces_lib Rtp_msgs_lib)
 target_include_directories(RTPRouteTask_pub_sub PUBLIC include/RTPRouteTask)
-
 
 add_library(SHRouteTask_pub_sub
     src/SHRouteTask/SHRouteTaskPublisher.cxx

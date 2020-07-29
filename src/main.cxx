@@ -68,6 +68,10 @@
 #include "SHRouteTask/SHRouteTaskSubscriber.h"
 #include "SHRouteTask/SHRouteTaskTools.h"
 
+#include "DiagnosticStatus/DiagnosticStatusPublisher.h"
+#include "DiagnosticStatus/DiagnosticStatusSubscriber.h"
+#include "DiagnosticStatus/DiagnosticStatusTools.h"
+
 #include <fastrtps/Domain.h>
 
 using namespace eprosima;
@@ -218,6 +222,18 @@ int main(int argc, char** argv)
 		if (strcmp(argv[1], "pose_array_tools") == 0)
 		{
 			type = 35;
+		}
+		if (strcmp(argv[1], "diagnostic_status_pub") == 0)
+		{
+			type = 36;
+		}
+		if (strcmp(argv[1], "diagnostic_status_sub") == 0)
+		{
+			type = 37;
+		}
+		if (strcmp(argv[1], "diagnostic_status_tools") == 0)
+		{
+			type = 38;
 		}
 	}
 	int num_bytes = 0;
@@ -644,6 +660,43 @@ int main(int argc, char** argv)
 			}
 			break;
 		}
+		case 36:
+		{
+			DiagnosticStatusPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 37:
+		{
+			DiagnosticStatusSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 38:
+		{
+			DiagnosticStatusTools tools;
+			std::string sub_topic = "pose_array_test";
+			std::string pub_topic = "pose_array_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}		
 	}
 
 	return 0;
