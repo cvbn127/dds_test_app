@@ -118,13 +118,13 @@ void RTPRouteTaskPublisher::PubListener::onPublicationMatched(Publisher* pub,Mat
     }
 }
 
-void RTPRouteTaskPublisher::publish(const rtp_msgs::msg::RTPRouteTask &msg)
+void RTPRouteTaskPublisher::publish(const rtp_msgs::msg::RouteTask &msg)
 {
     std::cout << "publish" << std::endl;
-    mp_publisher->write(const_cast<rtp_msgs::msg::RTPRouteTask *>(&msg));
+    mp_publisher->write(const_cast<rtp_msgs::msg::RouteTask *>(&msg));
 }
 
-void RTPRouteTaskPublisher::update_message(const rtp_msgs::msg::RTPRouteTask &msg)
+void RTPRouteTaskPublisher::update_message(const rtp_msgs::msg::RouteTask &msg)
 {
     latest_message = msg;
 }

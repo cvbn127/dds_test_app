@@ -25,6 +25,12 @@ add_library(Diagnostic_lib ${DIAGNOSTIC_MSGS_SRCS})
 target_link_libraries(Diagnostic_lib fastcdr fastrtps)
 target_include_directories(Diagnostic_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/diagnostic_msgs/msg )
 
+message(STATUS "Configuring glam_msgs...")
+file(GLOB_RECURSE GLAM_MSGS_SRCS ${MESSAGES_PATH}/glam_msgs/msg/*.cxx)
+add_library(Glam_lib ${GLAM_MSGS_SRCS})
+target_link_libraries(Glam_lib fastcdr fastrtps)
+target_include_directories(Glam_lib PUBLIC ${MESSAGES_PATH} ${MESSAGES_PATH}/glam_msgs/msg )
+
 message(STATUS "Configuring builtin_interfaces...")
 file(GLOB_RECURSE BUILTIN_INTERFACES_SRCS ${MESSAGES_PATH}/builtin_interfaces/msg/*.cxx)
 add_library(Builtin_interfaces_lib ${BUILTIN_INTERFACES_SRCS})
@@ -188,6 +194,30 @@ add_library(GeoPoseStamped_pub_sub
 target_link_libraries(GeoPoseStamped_pub_sub fastcdr fastrtps Builtin_interfaces_lib Geographic_msgs_lib)
 target_include_directories(GeoPoseStamped_pub_sub PUBLIC include/GeoPoseStamped)
 
+add_library(DiagnosticStatus_pub_sub
+    src/DiagnosticStatus/DiagnosticStatusPublisher.cxx
+    src/DiagnosticStatus/DiagnosticStatusSubscriber.cxx
+    src/DiagnosticStatus/DiagnosticStatusTools.cxx
+)
+target_link_libraries(DiagnosticStatus_pub_sub fastcdr fastrtps Builtin_interfaces_lib Diagnostic_lib)
+target_include_directories(DiagnosticStatus_pub_sub PUBLIC include/DiagnosticStatus)
+
+add_library(MarkerArrayStamped_pub_sub
+    src/MarkerArrayStamped/MarkerArrayStampedPublisher.cxx
+    src/MarkerArrayStamped/MarkerArrayStampedSubscriber.cxx
+    src/MarkerArrayStamped/MarkerArrayStampedTools.cxx
+)
+target_link_libraries(MarkerArrayStamped_pub_sub fastcdr fastrtps Builtin_interfaces_lib Glam_lib)
+target_include_directories(MarkerArrayStamped_pub_sub PUBLIC include/MarkerArrayStamped)
+
+add_library(GlamPoseStamped_pub_sub
+    src/GlamPoseStamped/GlamPoseStampedPublisher.cxx
+    src/GlamPoseStamped/GlamPoseStampedSubscriber.cxx
+    src/GlamPoseStamped/GlamPoseStampedTools.cxx
+)
+target_link_libraries(GlamPoseStamped_pub_sub fastcdr fastrtps Builtin_interfaces_lib Glam_lib)
+target_include_directories(GlamPoseStamped_pub_sub PUBLIC include/GlamPoseStamped)
+
 add_executable(TestApp src/main.cxx)
 
 target_link_libraries(TestApp fastcdr fastrtps
@@ -195,6 +225,8 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     Std_msgs_lib
     String_pub_sub
+
+    Glam_lib
 
     Nav_msgs_lib
     Odometry_pub_sub
@@ -207,6 +239,9 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     Sensor_msgs_lib
     Image_pub_sub
+    
+    Diagnostic_lib
+    DiagnosticStatus_pub_sub
 
     GisRtk_msgs_lib
     Rtp_msgs_lib
@@ -225,4 +260,7 @@ target_link_libraries(TestApp fastcdr fastrtps
     RegionArray_pub_sub
     ObjectsArray_pub_sub
     PoseArray_pub_sub
+
+    MarkerArrayStamped_pub_sub
+    GlamPoseStamped_pub_sub
 )

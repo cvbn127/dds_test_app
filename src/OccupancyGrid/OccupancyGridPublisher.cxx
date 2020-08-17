@@ -65,7 +65,7 @@ bool OccupancyGridPublisher::init(int rate)
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
     Wparam.topic.topicDataType = myType.getName();  //This type MUST be registered
-    Wparam.topic.topicName = "occupancy_grid";
+    Wparam.topic.topicName = "occupancy_grid_pub";
     Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     Wparam.qos.m_publishMode.kind = eprosima::fastrtps::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
 

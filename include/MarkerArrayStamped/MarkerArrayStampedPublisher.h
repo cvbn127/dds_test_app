@@ -20,22 +20,23 @@
  */
 
 
-#pragma once
+#ifndef _GLAM_MSGS_MSG_MarkerArrayStamped_PUBLISHER_H_
+#define _GLAM_MSGS_MSG_MarkerArrayStamped_PUBLISHER_H_
 
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/publisher/PublisherListener.h>
 
-#include "sh_chassis_msgs/msg/RouteTaskPubSubTypes.h"
+#include "MarkerArrayStampedPubSubTypes.h"
 
-class SHRouteTaskPublisher
+class MarkerArrayStampedPublisher
 {
 public:
-	SHRouteTaskPublisher(eprosima::fastrtps::Participant *participant = nullptr);
-	virtual ~SHRouteTaskPublisher();
-	bool init(int rate, const std::string &topic_name = "sh_route_task", const std::string &profile_name = "route-task-pub-profile");
+	MarkerArrayStampedPublisher(eprosima::fastrtps::Participant *participant = nullptr);
+	virtual ~MarkerArrayStampedPublisher();
+	bool init(int rate, const std::string &topic_name = "marker_array_stamped", const std::string &profile_name = "pose-array-pub-profile");
 	void run();
-	void publish(const sh_chassis_msgs::msg::RouteTask &msg);
-	void update_message(const sh_chassis_msgs::msg::RouteTask &msg);
+	void publish(const glam_msgs::msg::MarkerArrayStamped &msg);
+	void update_message(const glam_msgs::msg::MarkerArrayStamped &msg);
 
 private:
 	eprosima::fastrtps::Participant *mp_participant;
@@ -45,7 +46,7 @@ private:
 	bool should_delete_participant = false;
 	bool is_type_registred = false;
 
-	sh_chassis_msgs::msg::RouteTask latest_message;
+	glam_msgs::msg::MarkerArrayStamped latest_message;
 
 	class PubListener : public eprosima::fastrtps::PublisherListener
 	{
@@ -55,5 +56,7 @@ private:
 		void onPublicationMatched(eprosima::fastrtps::Publisher* pub,eprosima::fastrtps::rtps::MatchingInfo& info);
 		int n_matched;
 	} m_listener;
-	sh_chassis_msgs::msg::RouteTaskPubSubType myType;
+	glam_msgs::msg::MarkerArrayStampedPubSubType myType;
 };
+
+#endif // _SENSOR_MSGS_MSG_IMAGE_PUBLISHER_H_

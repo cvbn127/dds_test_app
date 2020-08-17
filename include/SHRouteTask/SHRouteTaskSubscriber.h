@@ -25,7 +25,7 @@
 #include <fastrtps/fastrtps_fwd.h>
 #include <fastrtps/subscriber/SubscriberListener.h>
 #include <fastrtps/subscriber/SampleInfo.h>
-#include "RouteTaskPubSubTypes.h"
+#include "sh_chassis_msgs/msg/RouteTaskPubSubTypes.h"
 
 class SHRouteTaskSubscriber
 {

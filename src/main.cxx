@@ -30,8 +30,8 @@
 #include "OccupancyGrid/OccupancyGridSubscriber.h"
 #include "OccupancyGrid/OccupancyGridTools.h"
 
-#include "Pose/PosePublisher.h"
-#include "Pose/PoseSubscriber.h"
+// #include "Pose/PosePublisher.h"
+// #include "Pose/PoseSubscriber.h"
 
 #include "Polygon/PolygonPublisher.h"
 #include "Polygon/PolygonSubscriber.h"
@@ -71,6 +71,14 @@
 #include "DiagnosticStatus/DiagnosticStatusPublisher.h"
 #include "DiagnosticStatus/DiagnosticStatusSubscriber.h"
 #include "DiagnosticStatus/DiagnosticStatusTools.h"
+
+#include "MarkerArrayStamped/MarkerArrayStampedPublisher.h"
+#include "MarkerArrayStamped/MarkerArrayStampedSubscriber.h"
+#include "MarkerArrayStamped/MarkerArrayStampedTools.h"
+
+#include "GlamPoseStamped/GlamPoseStampedPublisher.h"
+#include "GlamPoseStamped/GlamPoseStampedSubscriber.h"
+#include "GlamPoseStamped/GlamPoseStampedTools.h"
 
 #include <fastrtps/Domain.h>
 
@@ -235,6 +243,30 @@ int main(int argc, char** argv)
 		{
 			type = 38;
 		}
+		if (strcmp(argv[1], "marker_array_stamped_pub") == 0)
+		{
+			type = 39;
+		}
+		if (strcmp(argv[1], "marker_array_stamped_sub") == 0)
+		{
+			type = 40;
+		}
+		if (strcmp(argv[1], "marker_array_stamped_tools") == 0)
+		{
+			type = 41;
+		}
+		if (strcmp(argv[1], "glam_pose_stamped_pub") == 0)
+		{
+			type = 42;
+		}
+		if (strcmp(argv[1], "glam_pose_stamped_sub") == 0)
+		{
+			type = 43;
+		}
+		if (strcmp(argv[1], "glam_pose_stamped_tools") == 0)
+		{
+			type = 44;
+		}
 	}
 	int num_bytes = 0;
 	if (argc >= 4)
@@ -311,24 +343,24 @@ int main(int argc, char** argv)
 			}
 			break;
 		}
-		case 5:
-		{
-			PosePublisher pose_pub;
-			if (pose_pub.init(rate))
-			{
-				pose_pub.run();
-			}
-			break;
-		}
-		case 6:
-		{
-			PoseSubscriber pose_sub;
-			if (pose_sub.init())
-			{
-				pose_sub.run();
-			}
-			break;
-		}
+		// case 5:
+		// {
+		// 	PosePublisher pose_pub;
+		// 	if (pose_pub.init(rate))
+		// 	{
+		// 		pose_pub.run();
+		// 	}
+		// 	break;
+		// }
+		// case 6:
+		// {
+		// 	PoseSubscriber pose_sub;
+		// 	if (pose_sub.init())
+		// 	{
+		// 		pose_sub.run();
+		// 	}
+		// 	break;
+		// }
 		case 7:
 		{
 			PolygonPublisher polygon_pub;
@@ -696,7 +728,83 @@ int main(int argc, char** argv)
 				tools.run();
 			}
 			break;
-		}		
+		}
+		case 39:
+		{
+			MarkerArrayStampedPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 40:
+		{
+			MarkerArrayStampedSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 41:
+		{
+			MarkerArrayStampedTools tools;
+			std::string sub_topic = "marker_array_stamped_test";
+			std::string pub_topic = "marker_array_stamped_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}
+		case 42:
+		{
+			GlamPoseStampedPublisher pub;
+			if (pub.init(rate))
+			{
+				pub.run();
+			}
+			break;
+		}
+		case 43:
+		{
+			GlamPoseStampedSubscriber sub;
+			if (sub.init())
+			{
+				sub.run();
+			}
+			break;
+		}
+		case 44:
+		{
+			GlamPoseStampedTools tools;
+			std::string sub_topic = "glam_pose_stamped_test";
+			std::string pub_topic = "glam_pose_stamped_pub";
+			if (argc > 2)
+			{
+				sub_topic = argv[2];
+			}
+			if (argc > 3)
+			{
+				pub_topic = argv[3];
+			}
+			if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", sub_topic, pub_topic))
+			{
+				tools.run();
+			}
+			break;
+		}
+
+
 	}
 
 	return 0;
