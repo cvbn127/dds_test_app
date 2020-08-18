@@ -82,6 +82,8 @@
 
 #include <fastrtps/Domain.h>
 
+#include "templated_publisher.h"
+
 using namespace eprosima;
 using namespace eprosima::fastrtps;
 
@@ -91,6 +93,18 @@ int main(int argc, char** argv)
 
 	if (argc >= 2)
 	{
+		if (strcmp(argv[1], "t") == 0)
+		{
+			auto p = dds_test_app::TemplatedPublisher<sensor_msgs::msg::ImagePubSubType>{};
+			auto s = p.init(10, "test");
+			if (!s)
+			{
+				std::cout << "fuuuuuuuuuuuuuu" << std::endl;
+				return 1;
+			}
+			p.run();
+			return 0;
+		}
 		if (strcmp(argv[1], "publisher") == 0)
 		{
 			type = 1;
