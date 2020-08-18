@@ -62,7 +62,7 @@ bool ImagePublisher::init(int rate, const std::string &publisher_topic_name, con
         should_delete_participant = true;
         ParticipantAttributes PParam;
         PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
-        PParam.rtps.builtin.domainId = 120;
+        PParam.domainId = 120;
         mp_participant = Domain::createParticipant(PParam);
     }
 
@@ -86,7 +86,7 @@ bool ImagePublisher::init(int rate, const std::string &publisher_topic_name, con
         std::cerr << "Problem loading profile '" << profile_name << "'" << ". Using default values." << std::endl;
         publisher_att.topic.topicKind = NO_KEY;
         publisher_att.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-        publisher_att.qos.m_publishMode.kind = eprosima::fastrtps::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
+        publisher_att.qos.m_publishMode.kind = eprosima::fastdds::dds::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
     }
     publisher_att.topic.topicDataType = myType.getName();  //This type MUST be registered
     publisher_att.topic.topicName = publisher_topic_name;

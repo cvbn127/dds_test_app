@@ -46,7 +46,7 @@ bool PolygonPublisher::init(int rate)
 
     ParticipantAttributes PParam;
     PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
-    PParam.rtps.builtin.domainId = 120;
+    PParam.domainId = 120;
     // PParam.domainId = 120;
     // PParam.rtps.builtin.readerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     // PParam.rtps.builtin.writerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;

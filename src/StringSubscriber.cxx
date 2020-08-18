@@ -41,7 +41,7 @@ bool StringSubscriber::init()
 
     ParticipantAttributes PParam;
     PParam.rtps.setName("RTPSParticipant"); //You can put the name you want
-    PParam.rtps.builtin.domainId = 120;
+    PParam.domainId = 120;
     // PParam.domainId = 120;
     mp_participant = Domain::createParticipant(PParam);
     if(mp_participant == nullptr)

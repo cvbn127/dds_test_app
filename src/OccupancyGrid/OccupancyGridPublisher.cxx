@@ -46,7 +46,7 @@ bool OccupancyGridPublisher::init(int rate)
 
     ParticipantAttributes PParam;
     PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
-    PParam.rtps.builtin.domainId = 120;
+    PParam.domainId = 120;
     // PParam.domainId = 120;
     // PParam.rtps.builtin.readerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     // PParam.rtps.builtin.writerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
@@ -67,7 +67,7 @@ bool OccupancyGridPublisher::init(int rate)
     Wparam.topic.topicDataType = myType.getName();  //This type MUST be registered
     Wparam.topic.topicName = "occupancy_grid_pub";
     Wparam.historyMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-    Wparam.qos.m_publishMode.kind = eprosima::fastrtps::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
+    Wparam.qos.m_publishMode.kind = eprosima::fastdds::dds::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
 
     mp_publisher = Domain::createPublisher(mp_participant,Wparam,static_cast<PublisherListener*>(&m_listener));
 

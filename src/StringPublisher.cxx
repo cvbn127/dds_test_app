@@ -48,7 +48,7 @@ bool StringPublisher::init(int num_bytes, int rate)
 
     ParticipantAttributes PParam;
     PParam.rtps.setName("Participant_publisher");  //You can put here the name you want
-    PParam.rtps.builtin.domainId = 120;
+    PParam.domainId = 120;
     // PParam.domainId = 120;
     mp_participant = Domain::createParticipant(PParam);
     if(mp_participant == nullptr)

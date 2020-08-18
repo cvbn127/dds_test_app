@@ -63,7 +63,7 @@ bool GeoPoseStampedSubscriber::init(const std::string &topic_name, const std::st
         should_delete_participant = true;
         ParticipantAttributes PParam;
         PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
-        PParam.rtps.builtin.domainId = 120;
+        PParam.domainId = 120;
         mp_participant = Domain::createParticipant(PParam);
     }
     TopicDataType *data_type = nullptr;

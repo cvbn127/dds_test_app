@@ -41,7 +41,7 @@ bool OdometrySubscriber::init()
 
     ParticipantAttributes PParam;
     PParam.rtps.setName("Participant_subscriber"); //You can put the name you want
-    PParam.rtps.builtin.domainId = 120;
+    PParam.domainId = 120;
     // PParam.domainId = 120;
     // PParam.rtps.builtin.readerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
     // PParam.rtps.builtin.writerHistoryMemoryPolicy = PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
@@ -60,7 +60,7 @@ bool OdometrySubscriber::init()
     SubscriberAttributes Rparam;
     Rparam.topic.topicKind = NO_KEY;
     Rparam.topic.topicDataType = myType.getName(); //Must be registered before the creation of the subscriber
-    Rparam.topic.topicName = "odometry";
+    Rparam.topic.topicName = "/AtlansGeoPoseTopic";
     // Rparam.topic.topicName = "odometry_pub";
     mp_subscriber = Domain::createSubscriber(mp_participant,Rparam, static_cast<SubscriberListener*>(&m_listener));
     if(mp_subscriber == nullptr)
