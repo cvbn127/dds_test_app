@@ -37,6 +37,8 @@ using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
 
+using eprosima::fastdds::dds::TopicDataType;
+
 SHRouteTaskPublisher::SHRouteTaskPublisher(eprosima::fastrtps::Participant *participant) : mp_participant(participant), mp_publisher(nullptr) {}
 
 SHRouteTaskPublisher::~SHRouteTaskPublisher() 

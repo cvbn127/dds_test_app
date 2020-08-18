@@ -152,7 +152,7 @@ target_include_directories(GlamPoseStamped_pub_sub PUBLIC include/GlamPoseStampe
 add_executable(TestApp src/main.cxx)
 
 target_link_libraries(TestApp fastcdr fastrtps
-    Builtin_interfaces_lib 
+    builtin_interfaces_lib 
 
     std_msgs_lib
     String_pub_sub

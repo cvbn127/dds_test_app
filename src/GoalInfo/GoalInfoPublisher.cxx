@@ -35,6 +35,8 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
+using eprosima::fastdds::dds::TopicDataType;
+
 GoalInfoPublisher::GoalInfoPublisher(eprosima::fastrtps::Participant *participant) : mp_participant(participant), mp_publisher(nullptr) {}
 
 GoalInfoPublisher::~GoalInfoPublisher() 

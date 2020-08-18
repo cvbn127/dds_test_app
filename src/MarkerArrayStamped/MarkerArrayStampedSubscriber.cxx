@@ -32,6 +32,7 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
+using eprosima::fastdds::dds::TopicDataType;
 
 std::function<void(const glam_msgs::msg::MarkerArrayStamped&)> MarkerArrayStampedSubscriber::callback = [](auto msg){};
 static std::chrono::steady_clock::time_point last_received_timepoint = std::chrono::steady_clock::now();

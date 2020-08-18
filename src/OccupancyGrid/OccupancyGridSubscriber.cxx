@@ -31,6 +31,8 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
+using eprosima::fastdds::dds::TopicDataType;
+
 std::function<void(const nav_msgs::msg::OccupancyGrid&)> OccupancyGridSubscriber::callback = [](auto msg){};
 
 OccupancyGridSubscriber::OccupancyGridSubscriber() : mp_participant(nullptr), mp_subscriber(nullptr) {}

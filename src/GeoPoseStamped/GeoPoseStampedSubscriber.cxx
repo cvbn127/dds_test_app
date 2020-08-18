@@ -32,6 +32,7 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace eprosima::fastrtps::xmlparser;
+using eprosima::fastdds::dds::TopicDataType;
 
 std::function<void(const geographic_msgs::msg::GeoPoseStamped&)> GeoPoseStampedSubscriber::callback = [](auto msg){};
 static std::chrono::steady_clock::time_point last_received_timepoint = std::chrono::steady_clock::now();

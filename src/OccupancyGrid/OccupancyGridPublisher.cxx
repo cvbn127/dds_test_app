@@ -35,6 +35,8 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
+using eprosima::fastdds::dds::TopicDataType;
+
 OccupancyGridPublisher::OccupancyGridPublisher() : mp_participant(nullptr), mp_publisher(nullptr) {}
 
 OccupancyGridPublisher::~OccupancyGridPublisher() {	Domain::removeParticipant(mp_participant);}

@@ -34,6 +34,7 @@
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
+using eprosima::fastdds::dds::TopicDataType;
 
 OdometryPublisher::OdometryPublisher() : mp_participant(nullptr), mp_publisher(nullptr) {}
 

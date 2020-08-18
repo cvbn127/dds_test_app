@@ -31,6 +31,8 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
+using eprosima::fastdds::dds::TopicDataType;
+
 std::function<void(const action_msgs::msg::GoalInfo&)> GoalInfoSubscriber::callback = [](auto msg){};
 
 GoalInfoSubscriber::GoalInfoSubscriber(eprosima::fastrtps::Participant *participant) : mp_participant(participant), mp_subscriber(nullptr) {

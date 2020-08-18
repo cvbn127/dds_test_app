@@ -30,6 +30,7 @@
 
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
+using eprosima::fastdds::dds::TopicDataType;
 
 PolygonSubscriber::PolygonSubscriber() : mp_participant(nullptr), mp_subscriber(nullptr) {}
 
