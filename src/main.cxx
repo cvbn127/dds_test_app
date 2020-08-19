@@ -7,6 +7,8 @@
 #include <geometry_msgs/msg/PosePubSubTypes.h>
 #include <gis_rtk_msgs/msg/ObjectsArrayPubSubTypes.h>
 #include <gis_rtk_msgs/msg/RegionArrayPubSubTypes.h>
+#include <glam_msgs/msg/MarkerArrayStampedPubSubTypes.h>
+#include <glam_msgs/msg/PoseStampedPubSubTypes.h>
 #include <nav_msgs/msg/OccupancyGridPubSubTypes.h>
 #include <nav_msgs/msg/OdometryPubSubTypes.h>
 #include <rtp_msgs/msg/RouteTaskPubSubTypes.h>
@@ -14,18 +16,9 @@
 #include <sh_chassis_msgs/msg/RouteTaskPubSubTypes.h>
 #include <std_msgs/msg/StringPubSubTypes.h>
 
-#include "MarkerArrayStamped/MarkerArrayStampedPublisher.h"
-#include "MarkerArrayStamped/MarkerArrayStampedSubscriber.h"
-#include "MarkerArrayStamped/MarkerArrayStampedTools.h"
-
-#include "GlamPoseStamped/GlamPoseStampedPublisher.h"
-#include "GlamPoseStamped/GlamPoseStampedSubscriber.h"
-#include "GlamPoseStamped/GlamPoseStampedTools.h"
-
 #include "pub_sub_factory.h"
 
 int main(int argc, char **argv) {
-  int type = 0;
 
   dds_test_app::PubSubFactory factory;
   factory.register_factory<sensor_msgs::msg::ImagePubSubType>();
@@ -42,6 +35,8 @@ int main(int argc, char **argv) {
   factory.register_factory<action_msgs::msg::GoalInfoPubSubType>();
   factory.register_factory<rtp_msgs::msg::RouteTaskPubSubType>();
   factory.register_factory<sh_chassis_msgs::msg::RouteTaskPubSubType>();
+  factory.register_factory<glam_msgs::msg::PoseStampedPubSubType>();
+  factory.register_factory<glam_msgs::msg::MarkerArrayStampedPubSubType>();
 
   const std::string default_pub_topic = "test_app_pub";
   const std::string default_sub_topic = "test_app_sub";
@@ -125,145 +120,5 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  if (argc >= 2) {
-
-    if (strcmp(argv[1], "region_array_pub") == 0) {
-      type = 18;
-    }
-    if (strcmp(argv[1], "region_array_sub") == 0) {
-      type = 19;
-    }
-    if (strcmp(argv[1], "region_array_tools") == 0) {
-      type = 20;
-    }
-    if (strcmp(argv[1], "objects_array_pub") == 0) {
-      type = 30;
-    }
-    if (strcmp(argv[1], "objects_array_sub") == 0) {
-      type = 31;
-    }
-    if (strcmp(argv[1], "objects_array_tools") == 0) {
-      type = 32;
-    }
-    if (strcmp(argv[1], "diagnostic_status_pub") == 0) {
-      type = 36;
-    }
-    if (strcmp(argv[1], "diagnostic_status_sub") == 0) {
-      type = 37;
-    }
-    if (strcmp(argv[1], "diagnostic_status_tools") == 0) {
-      type = 38;
-    }
-    if (strcmp(argv[1], "marker_array_stamped_pub") == 0) {
-      type = 39;
-    }
-    if (strcmp(argv[1], "marker_array_stamped_sub") == 0) {
-      type = 40;
-    }
-    if (strcmp(argv[1], "marker_array_stamped_tools") == 0) {
-      type = 41;
-    }
-    if (strcmp(argv[1], "glam_pose_stamped_pub") == 0) {
-      type = 42;
-    }
-    if (strcmp(argv[1], "glam_pose_stamped_sub") == 0) {
-      type = 43;
-    }
-    if (strcmp(argv[1], "glam_pose_stamped_tools") == 0) {
-      type = 44;
-    }
-  }
-  int num_bytes = 0;
-  if (argc >= 4) {
-    try {
-      num_bytes = atoi(argv[3]);
-    } catch (...) {
-      num_bytes = 10;
-    }
-  };
-  int rate = 1;
-  if (argc == 3) {
-    try {
-      rate = atoi(argv[2]);
-    } catch (...) {
-      rate = 1;
-    }
-  }
-
-  if (type == 0) {
-    std::cout << "Error: Incorrect arguments." << std::endl;
-    std::cout << "Usage: " << std::endl << std::endl;
-    std::cout << argv[0] << " publisher|subscriber" << std::endl << std::endl;
-    return 0;
-  }
-
-  std::cout << "Starting " << std::endl;
-
-  // Register the type being used
-
-  switch (type) {
-
-  case 39: {
-    MarkerArrayStampedPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 40: {
-    MarkerArrayStampedSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 41: {
-    MarkerArrayStampedTools tools;
-    std::string sub_topic = "marker_array_stamped_test";
-    std::string pub_topic = "marker_array_stamped_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 42: {
-    GlamPoseStampedPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 43: {
-    GlamPoseStampedSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 44: {
-    GlamPoseStampedTools tools;
-    std::string sub_topic = "glam_pose_stamped_test";
-    std::string pub_topic = "glam_pose_stamped_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  }
-
-  return 0;
+  return 254;
 }

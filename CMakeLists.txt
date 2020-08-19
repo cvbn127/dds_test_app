@@ -23,22 +23,6 @@ find_package(sh_chassis_msgs_lib REQUIRED)
 find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
-add_library(MarkerArrayStamped_pub_sub
-    src/MarkerArrayStamped/MarkerArrayStampedPublisher.cxx
-    src/MarkerArrayStamped/MarkerArrayStampedSubscriber.cxx
-    src/MarkerArrayStamped/MarkerArrayStampedTools.cxx
-)
-target_link_libraries(MarkerArrayStamped_pub_sub fastcdr fastrtps builtin_interfaces_lib glam_msgs_lib)
-target_include_directories(MarkerArrayStamped_pub_sub PUBLIC include/MarkerArrayStamped)
-
-add_library(GlamPoseStamped_pub_sub
-    src/GlamPoseStamped/GlamPoseStampedPublisher.cxx
-    src/GlamPoseStamped/GlamPoseStampedSubscriber.cxx
-    src/GlamPoseStamped/GlamPoseStampedTools.cxx
-)
-target_link_libraries(GlamPoseStamped_pub_sub fastcdr fastrtps builtin_interfaces_lib glam_msgs_lib)
-target_include_directories(GlamPoseStamped_pub_sub PUBLIC include/GlamPoseStamped)
-
 add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp)
 
 target_include_directories(TestApp PRIVATE include)
@@ -51,18 +35,10 @@ target_link_libraries(TestApp fastcdr fastrtps
     geometry_msgs_lib
     sensor_msgs_lib
     diagnostic_msgs_lib
-
-
     gis_rtk_msgs_lib
     rtp_msgs_lib
-    
     sh_chassis_msgs_lib
-
     action_msgs_lib
     unique_identifier_msgs_lib 
-
     geographic_msgs_lib
-
-    MarkerArrayStamped_pub_sub
-    GlamPoseStamped_pub_sub
 )
