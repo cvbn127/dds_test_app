@@ -23,20 +23,6 @@ find_package(sh_chassis_msgs_lib REQUIRED)
 find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
-add_library(String_pub_sub
-    src/StringPublisher.cxx 
-    src/StringSubscriber.cxx
-)
-target_link_libraries(String_pub_sub fastcdr fastrtps std_msgs_lib)
-target_include_directories(String_pub_sub PUBLIC include)
-
-
-add_library(Odometry_pub_sub
-    src/Odometry/OdometryPublisher.cxx 
-    src/Odometry/OdometrySubscriber.cxx
-)
-target_link_libraries(Odometry_pub_sub fastcdr fastrtps builtin_interfaces_lib nav_msgs_lib)
-target_include_directories(Odometry_pub_sub PUBLIC include/Odometry)
 
 add_library(OccupancyGrid_pub_sub
     src/OccupancyGrid/OccupancyGridPublisher.cxx 
@@ -143,16 +129,16 @@ target_include_directories(GlamPoseStamped_pub_sub PUBLIC include/GlamPoseStampe
 
 add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp)
 
+target_include_directories(TestApp PRIVATE include)
+
 target_link_libraries(TestApp fastcdr fastrtps
     builtin_interfaces_lib 
 
     std_msgs_lib
-    String_pub_sub
 
     glam_msgs_lib
 
     nav_msgs_lib
-    Odometry_pub_sub
     OccupancyGrid_pub_sub
 
     geometry_msgs_lib
@@ -161,7 +147,7 @@ target_link_libraries(TestApp fastcdr fastrtps
     Polygon_pub_sub
 
     sensor_msgs_lib
-    
+
     diagnostic_msgs_lib
     DiagnosticStatus_pub_sub
 
