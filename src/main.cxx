@@ -35,9 +35,8 @@
 #include "Polygon/PolygonPublisher.h"
 #include "Polygon/PolygonSubscriber.h"
 
-#include "Image/ImagePublisher.h"
-#include "Image/ImageSubscriber.h"
-#include "Image/ImageTools.h"
+
+#include <sensor_msgs/msg/ImagePubSubTypes.h>
 
 #include "RTPRouteTask/RTPRouteTaskPublisher.h"
 #include "RTPRouteTask/RTPRouteTaskSubscriber.h"
@@ -194,15 +193,6 @@ int main(int argc, char **argv) {
     }
     if (strcmp(argv[1], "polygon_sub") == 0) {
       type = 8;
-    }
-    if (strcmp(argv[1], "image_pub") == 0) {
-      type = 9;
-    }
-    if (strcmp(argv[1], "image_sub") == 0) {
-      type = 10;
-    }
-    if (strcmp(argv[1], "image_tools") == 0) {
-      type = 11;
     }
     if (strcmp(argv[1], "occupancy_pub") == 0) {
       type = 12;
@@ -393,36 +383,7 @@ int main(int argc, char **argv) {
     }
     break;
   }
-  case 9: {
-    ImagePublisher image_pub;
-    if (image_pub.init(rate)) {
-      image_pub.run();
-    }
-    break;
-  }
-  case 10: {
-    ImageSubscriber image_sub;
-    if (image_sub.init()) {
-      image_sub.run();
-    }
-    break;
-  }
-  case 11: {
-    ImageTools image_tools;
-    std::string sub_topic = "image_test";
-    std::string pub_topic = "image_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (image_tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                         "part_profile_name", sub_topic, pub_topic)) {
-      image_tools.run();
-    }
-    break;
-  }
+
   case 12: {
     OccupancyGridPublisher occu_pub;
     if (occu_pub.init(rate)) {

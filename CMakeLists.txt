@@ -61,14 +61,6 @@ add_library(Polygon_pub_sub
 target_link_libraries(Polygon_pub_sub fastcdr fastrtps builtin_interfaces_lib geometry_msgs_lib)
 target_include_directories(Polygon_pub_sub PUBLIC include/Polygon)
 
-add_library(Image_pub_sub
-    src/Image/ImagePublisher.cxx
-    src/Image/ImageSubscriber.cxx
-    src/Image/ImageTools.cxx
-)
-target_link_libraries(Image_pub_sub fastcdr fastrtps builtin_interfaces_lib sensor_msgs_lib)
-target_include_directories(Image_pub_sub PUBLIC include/Image)
-
 add_library(RTPRouteTask_pub_sub
     src/RTPRouteTask/RTPRouteTaskPublisher.cxx
     src/RTPRouteTask/RTPRouteTaskSubscriber.cxx
@@ -169,7 +161,6 @@ target_link_libraries(TestApp fastcdr fastrtps
     Polygon_pub_sub
 
     sensor_msgs_lib
-    Image_pub_sub
     
     diagnostic_msgs_lib
     DiagnosticStatus_pub_sub
