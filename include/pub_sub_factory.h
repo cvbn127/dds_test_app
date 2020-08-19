@@ -24,12 +24,12 @@ public:
     builders[type_name] = std::make_shared<ConcreateBuilder<PubSubType>>();
   };
 
-  std::unique_ptr<ITools> create_tools(const std::string &pkg,
-                                       const std::string &msg);
-  std::unique_ptr<IPublisher> create_publisher(const std::string &pkg,
-                                               const std::string &msg);
-  std::unique_ptr<ISubscriber> create_subscriber(const std::string &pkg,
-                                                 const std::string &msg);
+  std::unique_ptr<ITools> create_tools(const std::string &message_type_name);
+  std::unique_ptr<IPublisher>
+  create_publisher(const std::string &message_type_name);
+  std::unique_ptr<ISubscriber>
+  create_subscriber(const std::string &message_type_name);
+  void print_factory_list();
 
 private:
   class Builder {
@@ -55,8 +55,7 @@ private:
 
   std::map<std::string, std::shared_ptr<Builder>> builders;
 
-  std::shared_ptr<Builder> get_builder(const std::string &pkg,
-                                       const std::string &msg);
+  std::shared_ptr<Builder> get_builder(const std::string &message_type_name);
 };
 
 } // namespace dds_test_app

@@ -86,61 +86,91 @@ int main(int argc, char **argv) {
 
   dds_test_app::PubSubFactory factory;
   factory.register_factory<sensor_msgs::msg::ImagePubSubType>();
+  factory.register_factory<std_msgs::msg::StringPubSubType>();
+
+  const std::string default_pub_topic = "test_app_pub";
+  const std::string default_sub_topic = "test_app_sub";
+
+  if (argc < 3) {
+    std::cout << "Usage:" << std::endl;
+    std::cout << argv[0] << " pub msg_type [topic]" << std::endl;
+    std::cout << argv[0] << " sub msg_type [topic]" << std::endl;
+    std::cout << argv[0] << " tools msg_type [pub_topic] [pub_topic]"
+              << std::endl;
+    std::cout << "Default pub topic name: " << default_pub_topic << std::endl;
+    std::cout << "Default sub topic name: " << default_sub_topic << std::endl;
+
+    std::cout << "Acceptable msg_types: " << std::endl;
+    factory.print_factory_list();
+    return 0;
+  }
+  auto verb = std::string(argv[1]);
+  auto msg_type = std::string(argv[2]);
+
+  if (verb == "pub") {
+    auto p = factory.create_publisher(msg_type);
+    if (!p) {
+      std::cerr << "Cannot create publisher with type " << msg_type
+                << std::endl;
+      return 255;
+    }
+    auto topic = default_pub_topic;
+    if (argc > 3) {
+      topic = std::string(argv[3]);
+    }
+    auto success = p->init(1, topic);
+    if (!success) {
+      std::cout << "Failed to init publisher!" << std::endl;
+      return 255;
+    }
+    p->run();
+    return 0;
+  }
+  if (verb == "sub") {
+    auto s = factory.create_subscriber(msg_type);
+    if (!s) {
+      std::cerr << "Cannot create subscriber with type " << msg_type
+                << std::endl;
+      return 255;
+    }
+    auto topic = default_sub_topic;
+    if (argc > 3) {
+      topic = std::string(argv[3]);
+    }
+    auto success = s->init(topic);
+    if (!success) {
+      std::cout << "Failed to init subscriber!" << std::endl;
+      return 255;
+    }
+    s->run();
+    return 0;
+  }
+  if (verb == "tools") {
+    auto t = factory.create_tools(msg_type);
+    if (!t) {
+      std::cerr << "Cannot create tools with type " << msg_type << std::endl;
+      return 255;
+    }
+    auto pub_topic = default_pub_topic;
+    auto sub_topic = default_sub_topic;
+    if (argc > 3) {
+      pub_topic = std::string(argv[3]);
+    }
+    if (argc > 4) {
+      sub_topic = std::string(argv[4]);
+    }
+
+    auto success = t->init("/volumes/soss_config/default_fastrtps_profile.xml",
+                           "part_profile_name", pub_topic, sub_topic);
+    if (!success) {
+      std::cout << "Failed to init tools!" << std::endl;
+      return 255;
+    }
+    t->run();
+    return 0;
+  }
 
   if (argc >= 2) {
-    if (strcmp(argv[1], "p") == 0) {
-      auto p = factory.create_publisher("sensor_msgs", "Image");
-      if (!p) {
-        std::cerr << "nulllllll" << std::endl;
-        return 1;
-      }
-      auto s = p->init(10, "/test_pub");
-      if (!s) {
-        std::cout << "fuuuuuuuuuuuuuu" << std::endl;
-        return 1;
-      }
-      p->run();
-      return 0;
-    }
-    if (strcmp(argv[1], "s") == 0) {
-      auto p = factory.create_subscriber("sensor_msgs", "Image");
-      if (!p) {
-        std::cerr << "nulllllll" << std::endl;
-        return 1;
-      }
-      auto s = p->init("/test_sub");
-      if (!s) {
-        std::cout << "fuuuuuuuuuuuuuu" << std::endl;
-        return 1;
-      }
-      p->run();
-      return 0;
-    }
-
-    if (strcmp(argv[1], "t") == 0) {
-      auto p = factory.create_tools("sensor_msgs", "Image");
-      if (!p) {
-        std::cerr << "nulllllll" << std::endl;
-        return 1;
-      }
-
-      std::string sub_topic = "/test_sub";
-      std::string pub_topic = "/test_pub";
-      if (argc > 2) {
-        sub_topic = argv[2];
-      }
-      if (argc > 3) {
-        pub_topic = argv[3];
-      }
-      auto s = p->init("/volumes/soss_config/default_fastrtps_profile.xml",
-                       "part_profile_name", pub_topic, sub_topic);
-      if (!s) {
-        std::cout << "fuuuuuuuuuuuuuu" << std::endl;
-        return 1;
-      }
-      p->run();
-      return 0;
-    }
 
     if (strcmp(argv[1], "publisher") == 0) {
       type = 1;
