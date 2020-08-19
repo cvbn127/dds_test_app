@@ -25,19 +25,7 @@ find_package(geographic_msgs_lib REQUIRED)
 
 
 
-add_library(Pose_pub_sub
-    src/Pose/PosePublisher.cxx 
-    src/Pose/PoseSubscriber.cxx
-)
-target_link_libraries(Pose_pub_sub fastcdr fastrtps builtin_interfaces_lib geometry_msgs_lib)
-target_include_directories(Pose_pub_sub PUBLIC include/Pose)
 
-add_library(Polygon_pub_sub
-    src/Polygon/PolygonPublisher.cxx
-    src/Polygon/PolygonSubscriber.cxx
-)
-target_link_libraries(Polygon_pub_sub fastcdr fastrtps builtin_interfaces_lib geometry_msgs_lib)
-target_include_directories(Polygon_pub_sub PUBLIC include/Polygon)
 
 add_library(RTPRouteTask_pub_sub
     src/RTPRouteTask/RTPRouteTaskPublisher.cxx
@@ -87,13 +75,7 @@ add_library(GoalInfo_pub_sub
 target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps builtin_interfaces_lib action_msgs_lib)
 target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
 
-add_library(GeoPoseStamped_pub_sub
-    src/GeoPoseStamped/GeoPoseStampedPublisher.cxx
-    src/GeoPoseStamped/GeoPoseStampedSubscriber.cxx
-    src/GeoPoseStamped/GeoPoseStampedTools.cxx
-)
-target_link_libraries(GeoPoseStamped_pub_sub fastcdr fastrtps builtin_interfaces_lib geographic_msgs_lib)
-target_include_directories(GeoPoseStamped_pub_sub PUBLIC include/GeoPoseStamped)
+
 
 add_library(DiagnosticStatus_pub_sub
     src/DiagnosticStatus/DiagnosticStatusPublisher.cxx
@@ -125,18 +107,10 @@ target_include_directories(TestApp PRIVATE include)
 
 target_link_libraries(TestApp fastcdr fastrtps
     builtin_interfaces_lib 
-
     std_msgs_lib
-
     glam_msgs_lib
-
     nav_msgs_lib
-
     geometry_msgs_lib
-    Pose_pub_sub
-
-    Polygon_pub_sub
-
     sensor_msgs_lib
 
     diagnostic_msgs_lib
@@ -154,7 +128,6 @@ target_link_libraries(TestApp fastcdr fastrtps
     unique_identifier_msgs_lib 
 
     geographic_msgs_lib
-    GeoPoseStamped_pub_sub
 
     RegionArray_pub_sub
     ObjectsArray_pub_sub
