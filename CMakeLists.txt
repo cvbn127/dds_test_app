@@ -24,14 +24,6 @@ find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
 
-add_library(OccupancyGrid_pub_sub
-    src/OccupancyGrid/OccupancyGridPublisher.cxx 
-    src/OccupancyGrid/OccupancyGridSubscriber.cxx
-    src/OccupancyGrid/OccupancyGridTools.cxx
-)
-target_link_libraries(OccupancyGrid_pub_sub fastcdr fastrtps builtin_interfaces_lib nav_msgs_lib)
-target_include_directories(OccupancyGrid_pub_sub PUBLIC include/OccupancyGrid)
-
 
 add_library(Pose_pub_sub
     src/Pose/PosePublisher.cxx 
@@ -139,7 +131,6 @@ target_link_libraries(TestApp fastcdr fastrtps
     glam_msgs_lib
 
     nav_msgs_lib
-    OccupancyGrid_pub_sub
 
     geometry_msgs_lib
     Pose_pub_sub
