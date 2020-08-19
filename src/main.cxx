@@ -1,11 +1,13 @@
 
 #include <geographic_msgs/msg/GeoPoseStampedPubSubTypes.h>
 #include <geometry_msgs/msg/PolygonPubSubTypes.h>
+#include <geometry_msgs/msg/PoseArrayPubSubTypes.h>
 #include <geometry_msgs/msg/PosePubSubTypes.h>
 #include <nav_msgs/msg/OccupancyGridPubSubTypes.h>
 #include <nav_msgs/msg/OdometryPubSubTypes.h>
 #include <sensor_msgs/msg/ImagePubSubTypes.h>
 #include <std_msgs/msg/StringPubSubTypes.h>
+#include <diagnostic_msgs/msg/DiagnosticStatusPubSubTypes.h>
 
 #include "RTPRouteTask/RTPRouteTaskPublisher.h"
 #include "RTPRouteTask/RTPRouteTaskSubscriber.h"
@@ -19,10 +21,6 @@
 #include "ObjectsArray/ObjectsArraySubscriber.h"
 #include "ObjectsArray/ObjectsArrayTools.h"
 
-#include "PoseArray/PoseArrayPublisher.h"
-#include "PoseArray/PoseArraySubscriber.h"
-#include "PoseArray/PoseArrayTools.h"
-
 #include "GoalInfo/GoalInfoPublisher.h"
 #include "GoalInfo/GoalInfoSubscriber.h"
 #include "GoalInfo/GoalInfoTools.h"
@@ -30,10 +28,6 @@
 #include "SHRouteTask/SHRouteTaskPublisher.h"
 #include "SHRouteTask/SHRouteTaskSubscriber.h"
 #include "SHRouteTask/SHRouteTaskTools.h"
-
-#include "DiagnosticStatus/DiagnosticStatusPublisher.h"
-#include "DiagnosticStatus/DiagnosticStatusSubscriber.h"
-#include "DiagnosticStatus/DiagnosticStatusTools.h"
 
 #include "MarkerArrayStamped/MarkerArrayStampedPublisher.h"
 #include "MarkerArrayStamped/MarkerArrayStampedSubscriber.h"
@@ -55,7 +49,9 @@ int main(int argc, char **argv) {
   factory.register_factory<nav_msgs::msg::OccupancyGridPubSubType>();
   factory.register_factory<geometry_msgs::msg::PolygonPubSubType>();
   factory.register_factory<geometry_msgs::msg::PosePubSubType>();
+  factory.register_factory<geometry_msgs::msg::PoseArrayPubSubType>();
   factory.register_factory<geographic_msgs::msg::GeoPoseStampedPubSubType>();
+  factory.register_factory<diagnostic_msgs::msg::DiagnosticStatusPubSubType>();
 
   const std::string default_pub_topic = "test_app_pub";
   const std::string default_sub_topic = "test_app_sub";
@@ -185,15 +181,6 @@ int main(int argc, char **argv) {
     }
     if (strcmp(argv[1], "objects_array_tools") == 0) {
       type = 32;
-    }
-    if (strcmp(argv[1], "pose_array_pub") == 0) {
-      type = 33;
-    }
-    if (strcmp(argv[1], "pose_array_sub") == 0) {
-      type = 34;
-    }
-    if (strcmp(argv[1], "pose_array_tools") == 0) {
-      type = 35;
     }
     if (strcmp(argv[1], "diagnostic_status_pub") == 0) {
       type = 36;
@@ -383,66 +370,6 @@ int main(int argc, char **argv) {
     ObjectsArrayTools tools;
     std::string sub_topic = "objects_array_test";
     std::string pub_topic = "objects_array_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 33: {
-    PoseArrayPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 34: {
-    PoseArraySubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 35: {
-    PoseArrayTools tools;
-    std::string sub_topic = "pose_array_test";
-    std::string pub_topic = "pose_array_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 36: {
-    DiagnosticStatusPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 37: {
-    DiagnosticStatusSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 38: {
-    DiagnosticStatusTools tools;
-    std::string sub_topic = "pose_array_test";
-    std::string pub_topic = "pose_array_pub";
     if (argc > 2) {
       sub_topic = argv[2];
     }

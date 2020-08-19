@@ -59,14 +59,6 @@ add_library(ObjectsArray_pub_sub
 target_link_libraries(ObjectsArray_pub_sub fastcdr fastrtps builtin_interfaces_lib gis_rtk_msgs_lib)
 target_include_directories(ObjectsArray_pub_sub PUBLIC include/ObjectsArray)
 
-add_library(PoseArray_pub_sub
-    src/PoseArray/PoseArrayPublisher.cxx
-    src/PoseArray/PoseArraySubscriber.cxx
-    src/PoseArray/PoseArrayTools.cxx
-)
-target_link_libraries(PoseArray_pub_sub fastcdr fastrtps builtin_interfaces_lib geometry_msgs_lib)
-target_include_directories(PoseArray_pub_sub PUBLIC include/PoseArray)
-
 add_library(GoalInfo_pub_sub
     src/GoalInfo/GoalInfoPublisher.cxx
     src/GoalInfo/GoalInfoSubscriber.cxx
@@ -74,16 +66,6 @@ add_library(GoalInfo_pub_sub
 )
 target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps builtin_interfaces_lib action_msgs_lib)
 target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
-
-
-
-add_library(DiagnosticStatus_pub_sub
-    src/DiagnosticStatus/DiagnosticStatusPublisher.cxx
-    src/DiagnosticStatus/DiagnosticStatusSubscriber.cxx
-    src/DiagnosticStatus/DiagnosticStatusTools.cxx
-)
-target_link_libraries(DiagnosticStatus_pub_sub fastcdr fastrtps builtin_interfaces_lib diagnostic_msgs_lib)
-target_include_directories(DiagnosticStatus_pub_sub PUBLIC include/DiagnosticStatus)
 
 add_library(MarkerArrayStamped_pub_sub
     src/MarkerArrayStamped/MarkerArrayStampedPublisher.cxx
@@ -112,9 +94,8 @@ target_link_libraries(TestApp fastcdr fastrtps
     nav_msgs_lib
     geometry_msgs_lib
     sensor_msgs_lib
-
     diagnostic_msgs_lib
-    DiagnosticStatus_pub_sub
+
 
     gis_rtk_msgs_lib
     rtp_msgs_lib
@@ -131,7 +112,6 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     RegionArray_pub_sub
     ObjectsArray_pub_sub
-    PoseArray_pub_sub
 
     MarkerArrayStamped_pub_sub
     GlamPoseStamped_pub_sub
