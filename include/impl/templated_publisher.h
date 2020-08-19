@@ -4,12 +4,15 @@
 #include <fastrtps/attributes/PublisherAttributes.h>
 #include <fastrtps/participant/Participant.h>
 #include <fastrtps/publisher/Publisher.h>
+#include <fastrtps/publisher/PublisherListener.h>
 
 #include <fastrtps/Domain.h>
 #include <fastrtps/xmlparser/XMLProfileManager.h>
 
 #include <chrono>
 #include <thread>
+
+#include "interface/publisher.h"
 
 namespace dds_test_app {
 template <typename PubSubType> typename PubSubType::type initialize_msg() {
@@ -18,13 +21,13 @@ template <typename PubSubType> typename PubSubType::type initialize_msg() {
   return default_msg;
 };
 
-template <typename PubSubType> class TemplatedPublisher {
+template <typename PubSubType> class TemplatedPublisher : public IPublisher {
 public:
   using message_type = typename PubSubType::type;
   TemplatedPublisher() : TemplatedPublisher(nullptr){};
   TemplatedPublisher(eprosima::fastrtps::Participant *participant)
       : mp_participant(participant), mp_publisher(nullptr){};
-  ~TemplatedPublisher() {
+  ~TemplatedPublisher() override {
     if (is_type_registred) {
       std::cout << "unregister type" << std::endl;
       eprosima::fastrtps::Domain::unregisterType(mp_participant,
@@ -35,8 +38,9 @@ public:
     }
   };
   bool init(int rate, const std::string &topic_name,
-            const std::string &profile_name = "test-app-pub-profile") {
-    std::cout << "Initiating test publisher " << topic_name << " " << myType.getName() << std::endl;
+            const std::string &profile_name = "test-app-pub-profile") override {
+    std::cout << "Initiating test publisher " << topic_name << " "
+              << myType.getName() << std::endl;
     m_rate = rate;
     if (mp_participant == nullptr) {
       should_delete_participant = true;
@@ -83,10 +87,11 @@ public:
       return false;
     }
 
-    std::cout << "Publisher succesfully created " << topic_name << " " << myType.getName() << std::endl;
+    std::cout << "Publisher succesfully created " << topic_name << " "
+              << myType.getName() << std::endl;
     return true;
   };
-  void run() {
+  void run() override {
     size_t sleep_time = (1.0 / m_rate) * 1000.0;
     latest_message = initialize_msg<PubSubType>();
     int msgsent = 0;

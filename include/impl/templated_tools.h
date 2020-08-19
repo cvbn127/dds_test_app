@@ -10,19 +10,21 @@
 #include <future>
 #include <iostream>
 
+#include "interface/tools.h"
+
 namespace dds_test_app {
-template <typename PubSubType> class TemplatedTools {
+template <typename PubSubType> class TemplatedTools : public ITools {
 public:
   TemplatedTools() = default;
   TemplatedTools(TemplatedTools<PubSubType> &&rhs) = default;
-  ~TemplatedTools() {
+  ~TemplatedTools() override {
     if (participant != nullptr) {
       eprosima::fastrtps::Domain::removeParticipant(participant);
     }
   };
   bool init(const std::string &file_path, const std::string &profile_name,
             const std::string &pub_topic_name,
-            const std::string &sub_topic_name, size_t pub_rate = 1) {
+            const std::string &sub_topic_name, size_t pub_rate = 1) override {
     if (eprosima::fastrtps::xmlparser::XMLP_ret::XML_OK !=
         eprosima::fastrtps::xmlparser::XMLProfileManager::loadXMLFile(
             file_path)) {
@@ -49,7 +51,7 @@ public:
     });
     return result;
   };
-  void run() {
+  void run() override {
     auto future =
         std::async(std::launch::async, [this]() { publisher->run(); });
     subscriber->run();

@@ -10,6 +10,8 @@
 #include <fastrtps/xmlparser/XMLProfileManager.h>
 #include <functional>
 
+#include "interface/subscriber.h"
+
 namespace dds_test_app {
 
 template <typename PubSubType>
@@ -18,13 +20,13 @@ void print_message(const typename PubSubType::type &msg) {
   return;
 }
 
-template <typename PubSubType> class TemplatedSubscriber {
+template <typename PubSubType> class TemplatedSubscriber : public ISubscriber {
 public:
   using message_type = typename PubSubType::type;
   TemplatedSubscriber(eprosima::fastrtps::Participant *participant = nullptr)
       : mp_participant(participant), mp_subscriber(nullptr){};
 
-  ~TemplatedSubscriber() {
+  ~TemplatedSubscriber() override {
     if (is_type_registred) {
       eprosima::fastrtps::Domain::unregisterType(mp_participant,
                                                  myType.getName());
@@ -39,8 +41,9 @@ public:
   };
 
   bool init(const std::string &topic_name,
-            const std::string &profile_name = "test-app-sub-profile") {
-    std::cout << "Initiating test subscriber " << topic_name << " " << myType.getName() << std::endl;
+            const std::string &profile_name = "test-app-sub-profile") override {
+    std::cout << "Initiating test subscriber " << topic_name << " "
+              << myType.getName() << std::endl;
     if (mp_participant == nullptr) {
       should_delete_participant = true;
       eprosima::fastrtps::ParticipantAttributes PParam;
@@ -82,11 +85,12 @@ public:
       return false;
     }
     SubListener::last_received_timepoint = std::chrono::steady_clock::now();
-    std::cout << "Subscriber succesfully created " << topic_name << " " << myType.getName() << std::endl;
+    std::cout << "Subscriber succesfully created " << topic_name << " "
+              << myType.getName() << std::endl;
     return true;
   };
 
-  void run() {
+  void run() override {
     std::cout << "Running. " << std::endl;
     bool should_stop = false;
     char c = 0;

@@ -149,7 +149,7 @@ add_library(GlamPoseStamped_pub_sub
 target_link_libraries(GlamPoseStamped_pub_sub fastcdr fastrtps builtin_interfaces_lib glam_msgs_lib)
 target_include_directories(GlamPoseStamped_pub_sub PUBLIC include/GlamPoseStamped)
 
-add_executable(TestApp src/main.cxx)
+add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp)
 
 target_link_libraries(TestApp fastcdr fastrtps
     builtin_interfaces_lib 
