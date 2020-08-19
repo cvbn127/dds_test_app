@@ -24,9 +24,6 @@ find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
 
-
-
-
 add_library(RTPRouteTask_pub_sub
     src/RTPRouteTask/RTPRouteTaskPublisher.cxx
     src/RTPRouteTask/RTPRouteTaskSubscriber.cxx
@@ -42,30 +39,6 @@ add_library(SHRouteTask_pub_sub
 )
 target_link_libraries(SHRouteTask_pub_sub fastcdr fastrtps builtin_interfaces_lib sh_chassis_msgs_lib)
 target_include_directories(SHRouteTask_pub_sub PUBLIC include/SHRouteTask)
-
-add_library(RegionArray_pub_sub
-    src/RegionArray/RegionArrayPublisher.cxx
-    src/RegionArray/RegionArraySubscriber.cxx
-    src/RegionArray/RegionArrayTools.cxx
-)
-target_link_libraries(RegionArray_pub_sub fastcdr fastrtps builtin_interfaces_lib gis_rtk_msgs_lib)
-target_include_directories(RegionArray_pub_sub PUBLIC include/RegionArray)
-
-add_library(ObjectsArray_pub_sub
-    src/ObjectsArray/ObjectsArrayPublisher.cxx
-    src/ObjectsArray/ObjectsArraySubscriber.cxx
-    src/ObjectsArray/ObjectsArrayTools.cxx
-)
-target_link_libraries(ObjectsArray_pub_sub fastcdr fastrtps builtin_interfaces_lib gis_rtk_msgs_lib)
-target_include_directories(ObjectsArray_pub_sub PUBLIC include/ObjectsArray)
-
-add_library(GoalInfo_pub_sub
-    src/GoalInfo/GoalInfoPublisher.cxx
-    src/GoalInfo/GoalInfoSubscriber.cxx
-    src/GoalInfo/GoalInfoTools.cxx
-)
-target_link_libraries(GoalInfo_pub_sub fastcdr fastrtps builtin_interfaces_lib action_msgs_lib)
-target_include_directories(GoalInfo_pub_sub PUBLIC include/GoalInfo)
 
 add_library(MarkerArrayStamped_pub_sub
     src/MarkerArrayStamped/MarkerArrayStampedPublisher.cxx
@@ -105,13 +78,9 @@ target_link_libraries(TestApp fastcdr fastrtps
     SHRouteTask_pub_sub
 
     action_msgs_lib
-    GoalInfo_pub_sub
     unique_identifier_msgs_lib 
 
     geographic_msgs_lib
-
-    RegionArray_pub_sub
-    ObjectsArray_pub_sub
 
     MarkerArrayStamped_pub_sub
     GlamPoseStamped_pub_sub

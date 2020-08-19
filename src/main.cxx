@@ -1,29 +1,20 @@
 
+#include <action_msgs/msg/GoalInfoPubSubTypes.h>
+#include <diagnostic_msgs/msg/DiagnosticStatusPubSubTypes.h>
 #include <geographic_msgs/msg/GeoPoseStampedPubSubTypes.h>
 #include <geometry_msgs/msg/PolygonPubSubTypes.h>
 #include <geometry_msgs/msg/PoseArrayPubSubTypes.h>
 #include <geometry_msgs/msg/PosePubSubTypes.h>
+#include <gis_rtk_msgs/msg/ObjectsArrayPubSubTypes.h>
+#include <gis_rtk_msgs/msg/RegionArrayPubSubTypes.h>
 #include <nav_msgs/msg/OccupancyGridPubSubTypes.h>
 #include <nav_msgs/msg/OdometryPubSubTypes.h>
 #include <sensor_msgs/msg/ImagePubSubTypes.h>
 #include <std_msgs/msg/StringPubSubTypes.h>
-#include <diagnostic_msgs/msg/DiagnosticStatusPubSubTypes.h>
 
 #include "RTPRouteTask/RTPRouteTaskPublisher.h"
 #include "RTPRouteTask/RTPRouteTaskSubscriber.h"
 #include "RTPRouteTask/RTPRouteTaskTools.h"
-
-#include "RegionArray/RegionArrayPublisher.h"
-#include "RegionArray/RegionArraySubscriber.h"
-#include "RegionArray/RegionArrayTools.h"
-
-#include "ObjectsArray/ObjectsArrayPublisher.h"
-#include "ObjectsArray/ObjectsArraySubscriber.h"
-#include "ObjectsArray/ObjectsArrayTools.h"
-
-#include "GoalInfo/GoalInfoPublisher.h"
-#include "GoalInfo/GoalInfoSubscriber.h"
-#include "GoalInfo/GoalInfoTools.h"
 
 #include "SHRouteTask/SHRouteTaskPublisher.h"
 #include "SHRouteTask/SHRouteTaskSubscriber.h"
@@ -52,6 +43,9 @@ int main(int argc, char **argv) {
   factory.register_factory<geometry_msgs::msg::PoseArrayPubSubType>();
   factory.register_factory<geographic_msgs::msg::GeoPoseStampedPubSubType>();
   factory.register_factory<diagnostic_msgs::msg::DiagnosticStatusPubSubType>();
+  factory.register_factory<gis_rtk_msgs::msg::RegionArrayPubSubType>();
+  factory.register_factory<gis_rtk_msgs::msg::ObjectsArrayPubSubType>();
+  factory.register_factory<action_msgs::msg::GoalInfoPubSubType>();
 
   const std::string default_pub_topic = "test_app_pub";
   const std::string default_sub_topic = "test_app_sub";
@@ -154,15 +148,6 @@ int main(int argc, char **argv) {
     }
     if (strcmp(argv[1], "region_array_tools") == 0) {
       type = 20;
-    }
-    if (strcmp(argv[1], "goal_info_pub") == 0) {
-      type = 21;
-    }
-    if (strcmp(argv[1], "goal_info_sub") == 0) {
-      type = 22;
-    }
-    if (strcmp(argv[1], "goal_info_tools") == 0) {
-      type = 23;
     }
     if (strcmp(argv[1], "sh_route_task_pub") == 0) {
       type = 27;
@@ -270,58 +255,6 @@ int main(int argc, char **argv) {
     }
     break;
   }
-  case 18: {
-    RegionArrayPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 19: {
-    RegionArraySubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 20: {
-    RegionArrayTools tools;
-    std::string sub_topic = "region_array_test";
-    std::string pub_topic = "region_array_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 21: {
-    GoalInfoPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 22: {
-    GoalInfoSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 23: {
-    GoalInfoTools tools;
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name")) {
-      tools.run();
-    }
-    break;
-  }
   case 27: {
     SHRouteTaskPublisher pub;
     if (pub.init(rate)) {
@@ -340,36 +273,6 @@ int main(int argc, char **argv) {
     SHRouteTaskTools tools;
     std::string sub_topic = "sh_route_task_test";
     std::string pub_topic = "sh_route_task_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 30: {
-    ObjectsArrayPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 31: {
-    ObjectsArraySubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 32: {
-    ObjectsArrayTools tools;
-    std::string sub_topic = "objects_array_test";
-    std::string pub_topic = "objects_array_pub";
     if (argc > 2) {
       sub_topic = argv[2];
     }
