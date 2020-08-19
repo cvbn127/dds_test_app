@@ -9,16 +9,10 @@
 #include <gis_rtk_msgs/msg/RegionArrayPubSubTypes.h>
 #include <nav_msgs/msg/OccupancyGridPubSubTypes.h>
 #include <nav_msgs/msg/OdometryPubSubTypes.h>
+#include <rtp_msgs/msg/RouteTaskPubSubTypes.h>
 #include <sensor_msgs/msg/ImagePubSubTypes.h>
+#include <sh_chassis_msgs/msg/RouteTaskPubSubTypes.h>
 #include <std_msgs/msg/StringPubSubTypes.h>
-
-#include "RTPRouteTask/RTPRouteTaskPublisher.h"
-#include "RTPRouteTask/RTPRouteTaskSubscriber.h"
-#include "RTPRouteTask/RTPRouteTaskTools.h"
-
-#include "SHRouteTask/SHRouteTaskPublisher.h"
-#include "SHRouteTask/SHRouteTaskSubscriber.h"
-#include "SHRouteTask/SHRouteTaskTools.h"
 
 #include "MarkerArrayStamped/MarkerArrayStampedPublisher.h"
 #include "MarkerArrayStamped/MarkerArrayStampedSubscriber.h"
@@ -46,6 +40,8 @@ int main(int argc, char **argv) {
   factory.register_factory<gis_rtk_msgs::msg::RegionArrayPubSubType>();
   factory.register_factory<gis_rtk_msgs::msg::ObjectsArrayPubSubType>();
   factory.register_factory<action_msgs::msg::GoalInfoPubSubType>();
+  factory.register_factory<rtp_msgs::msg::RouteTaskPubSubType>();
+  factory.register_factory<sh_chassis_msgs::msg::RouteTaskPubSubType>();
 
   const std::string default_pub_topic = "test_app_pub";
   const std::string default_sub_topic = "test_app_sub";
@@ -131,15 +127,6 @@ int main(int argc, char **argv) {
 
   if (argc >= 2) {
 
-    if (strcmp(argv[1], "rtp_route_task_pub") == 0) {
-      type = 15;
-    }
-    if (strcmp(argv[1], "rtp_route_task_sub") == 0) {
-      type = 16;
-    }
-    if (strcmp(argv[1], "rtp_route_task_tools") == 0) {
-      type = 17;
-    }
     if (strcmp(argv[1], "region_array_pub") == 0) {
       type = 18;
     }
@@ -148,15 +135,6 @@ int main(int argc, char **argv) {
     }
     if (strcmp(argv[1], "region_array_tools") == 0) {
       type = 20;
-    }
-    if (strcmp(argv[1], "sh_route_task_pub") == 0) {
-      type = 27;
-    }
-    if (strcmp(argv[1], "sh_route_task_sub") == 0) {
-      type = 28;
-    }
-    if (strcmp(argv[1], "sh_route_task_tools") == 0) {
-      type = 29;
     }
     if (strcmp(argv[1], "objects_array_pub") == 0) {
       type = 30;
@@ -225,66 +203,6 @@ int main(int argc, char **argv) {
 
   switch (type) {
 
-  case 15: {
-    RTPRouteTaskPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 16: {
-    RTPRouteTaskSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 17: {
-    RTPRouteTaskTools tools;
-    std::string sub_topic = "rtp_route_task_test";
-    std::string pub_topic = "rtp_route_task_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
-  case 27: {
-    SHRouteTaskPublisher pub;
-    if (pub.init(rate)) {
-      pub.run();
-    }
-    break;
-  }
-  case 28: {
-    SHRouteTaskSubscriber sub;
-    if (sub.init()) {
-      sub.run();
-    }
-    break;
-  }
-  case 29: {
-    SHRouteTaskTools tools;
-    std::string sub_topic = "sh_route_task_test";
-    std::string pub_topic = "sh_route_task_pub";
-    if (argc > 2) {
-      sub_topic = argv[2];
-    }
-    if (argc > 3) {
-      pub_topic = argv[3];
-    }
-    if (tools.init("/volumes/soss_config/default_fastrtps_profile.xml",
-                   "part_profile_name", sub_topic, pub_topic)) {
-      tools.run();
-    }
-    break;
-  }
   case 39: {
     MarkerArrayStampedPublisher pub;
     if (pub.init(rate)) {

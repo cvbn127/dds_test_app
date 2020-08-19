@@ -23,23 +23,6 @@ find_package(sh_chassis_msgs_lib REQUIRED)
 find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
-
-add_library(RTPRouteTask_pub_sub
-    src/RTPRouteTask/RTPRouteTaskPublisher.cxx
-    src/RTPRouteTask/RTPRouteTaskSubscriber.cxx
-    src/RTPRouteTask/RTPRouteTaskTools.cxx
-)
-target_link_libraries(RTPRouteTask_pub_sub fastcdr fastrtps builtin_interfaces_lib rtp_msgs_lib)
-target_include_directories(RTPRouteTask_pub_sub PUBLIC include/RTPRouteTask)
-
-add_library(SHRouteTask_pub_sub
-    src/SHRouteTask/SHRouteTaskPublisher.cxx
-    src/SHRouteTask/SHRouteTaskSubscriber.cxx
-    src/SHRouteTask/SHRouteTaskTools.cxx
-)
-target_link_libraries(SHRouteTask_pub_sub fastcdr fastrtps builtin_interfaces_lib sh_chassis_msgs_lib)
-target_include_directories(SHRouteTask_pub_sub PUBLIC include/SHRouteTask)
-
 add_library(MarkerArrayStamped_pub_sub
     src/MarkerArrayStamped/MarkerArrayStampedPublisher.cxx
     src/MarkerArrayStamped/MarkerArrayStampedSubscriber.cxx
@@ -72,10 +55,8 @@ target_link_libraries(TestApp fastcdr fastrtps
 
     gis_rtk_msgs_lib
     rtp_msgs_lib
-    RTPRouteTask_pub_sub
     
     sh_chassis_msgs_lib
-    SHRouteTask_pub_sub
 
     action_msgs_lib
     unique_identifier_msgs_lib 
