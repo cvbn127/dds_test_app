@@ -18,7 +18,8 @@
 
 #include "pub_sub_factory.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
   dds_test_app::PubSubFactory factory;
   factory.register_factory<sensor_msgs::msg::ImagePubSubType>();
@@ -41,12 +42,12 @@ int main(int argc, char **argv) {
   const std::string default_pub_topic = "test_app_pub";
   const std::string default_sub_topic = "test_app_sub";
 
-  if (argc < 3) {
+  if (argc < 3)
+  {
     std::cout << "Usage:" << std::endl;
     std::cout << argv[0] << " pub msg_type [topic]" << std::endl;
     std::cout << argv[0] << " sub msg_type [topic]" << std::endl;
-    std::cout << argv[0] << " tools msg_type [pub_topic] [pub_topic]"
-              << std::endl;
+    std::cout << argv[0] << " tools msg_type [pub_topic] [pub_topic]" << std::endl;
     std::cout << "Default pub topic name: " << default_pub_topic << std::endl;
     std::cout << "Default sub topic name: " << default_sub_topic << std::endl;
 
@@ -54,65 +55,75 @@ int main(int argc, char **argv) {
     factory.print_factory_list();
     return 0;
   }
-  auto verb = std::string(argv[1]);
+  auto verb     = std::string(argv[1]);
   auto msg_type = std::string(argv[2]);
 
-  if (verb == "pub") {
+  if (verb == "pub")
+  {
     auto p = factory.create_publisher(msg_type);
-    if (!p) {
-      std::cerr << "Cannot create publisher with type " << msg_type
-                << std::endl;
+    if (!p)
+    {
+      std::cerr << "Cannot create publisher with type " << msg_type << std::endl;
       return 255;
     }
     auto topic = default_pub_topic;
-    if (argc > 3) {
+    if (argc > 3)
+    {
       topic = std::string(argv[3]);
     }
     auto success = p->init(1, topic);
-    if (!success) {
+    if (!success)
+    {
       std::cout << "Failed to init publisher!" << std::endl;
       return 255;
     }
     p->run();
     return 0;
   }
-  if (verb == "sub") {
+  if (verb == "sub")
+  {
     auto s = factory.create_subscriber(msg_type);
-    if (!s) {
-      std::cerr << "Cannot create subscriber with type " << msg_type
-                << std::endl;
+    if (!s)
+    {
+      std::cerr << "Cannot create subscriber with type " << msg_type << std::endl;
       return 255;
     }
     auto topic = default_sub_topic;
-    if (argc > 3) {
+    if (argc > 3)
+    {
       topic = std::string(argv[3]);
     }
     auto success = s->init(topic);
-    if (!success) {
+    if (!success)
+    {
       std::cout << "Failed to init subscriber!" << std::endl;
       return 255;
     }
     s->run();
     return 0;
   }
-  if (verb == "tools") {
+  if (verb == "tools")
+  {
     auto t = factory.create_tools(msg_type);
-    if (!t) {
+    if (!t)
+    {
       std::cerr << "Cannot create tools with type " << msg_type << std::endl;
       return 255;
     }
     auto pub_topic = default_pub_topic;
     auto sub_topic = default_sub_topic;
-    if (argc > 3) {
+    if (argc > 3)
+    {
       pub_topic = std::string(argv[3]);
     }
-    if (argc > 4) {
+    if (argc > 4)
+    {
       sub_topic = std::string(argv[4]);
     }
 
-    auto success = t->init("/volumes/soss_config/default_fastrtps_profile.xml",
-                           "part_profile_name", pub_topic, sub_topic);
-    if (!success) {
+    auto success = t->init("/volumes/soss_config/default_fastrtps_profile.xml", "part_profile_name", pub_topic, sub_topic);
+    if (!success)
+    {
       std::cout << "Failed to init tools!" << std::endl;
       return 255;
     }
