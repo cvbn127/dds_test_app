@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-project("generated_code")
+project(TestApp)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -42,3 +42,28 @@ target_link_libraries(TestApp fastcdr fastrtps
     unique_identifier_msgs_lib 
     geographic_msgs_lib
 )
+
+
+option(RUN_CLANG_TIDY "Run clang_tidy to static code checking" ON)
+
+if(${RUN_CLANG_TIDY})
+  find_program(
+    CLANG_TIDY_EXE
+    NAMES "clang-tidy"
+    DOC "Path to clang-tidy executable"
+    )
+  if(NOT CLANG_TIDY_EXE)
+    message(STATUS "clang-tidy not found.")
+  else()
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    set(DO_CLANG_TIDY "${CLANG_TIDY_EXE}" "-config=" "-fix")
+  endif()
+
+  if(CLANG_TIDY_EXE)
+    set_target_properties(
+      TestApp PROPERTIES
+      CXX_CLANG_TIDY "${DO_CLANG_TIDY}"
+    )
+  endif()
+  
+endif()

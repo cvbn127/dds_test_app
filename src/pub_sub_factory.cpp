@@ -15,7 +15,7 @@ namespace dds_test_app
     return it->second;
   }
 
-  std::unique_ptr<IPublisher> PubSubFactory::create_publisher(const std::string &message_type_name)
+  auto PubSubFactory::create_publisher(const std::string &message_type_name) -> std::unique_ptr<IPublisher>
   {
     auto builder = get_builder(message_type_name);
     if (!builder)
@@ -25,7 +25,7 @@ namespace dds_test_app
     return builder->build_publisher();
   }
 
-  std::unique_ptr<ISubscriber> PubSubFactory::create_subscriber(const std::string &message_type_name)
+  auto PubSubFactory::create_subscriber(const std::string &message_type_name) -> std::unique_ptr<ISubscriber>
   {
     auto builder = get_builder(message_type_name);
     if (!builder)
@@ -35,7 +35,7 @@ namespace dds_test_app
     return builder->build_subscriber();
   }
 
-  std::unique_ptr<ITools> PubSubFactory::create_tools(const std::string &message_type_name)
+  auto PubSubFactory::create_tools(const std::string &message_type_name) -> std::unique_ptr<ITools>
   {
     auto builder = get_builder(message_type_name);
     if (!builder)
@@ -47,7 +47,7 @@ namespace dds_test_app
 
   void PubSubFactory::print_factory_list()
   {
-    for (auto pair : builders)
+    for (const auto &pair : builders)
     {
       std::cout << pair.first << std::endl;
     }

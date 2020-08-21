@@ -18,7 +18,7 @@
 
 #include "pub_sub_factory.h"
 
-int main(int argc, char **argv)
+auto main(int argc, char **argv) -> int
 {
 
   dds_test_app::PubSubFactory factory;
