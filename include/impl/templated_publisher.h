@@ -71,17 +71,23 @@ namespace dds_test_app
 
       _type.register_type(_participant);
 
-      _publisher = _participant->create_publisher_with_profile(profile_name, nullptr);
+      // _publisher = _participant->create_publisher_with_profile(profile_name, nullptr);
+      // if (nullptr == _publisher)
+      // {
+      //   std::cerr << "Cannot create publisher with profile " << profile_name << std::endl;
+      //   std::cerr << "Trying to create publisher with default qos settings..." << std::endl;
+      //   _publisher = _participant->create_publisher(eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT, nullptr);
+      //   if (nullptr == _publisher)
+      //   {
+      //     std::cerr << "Failed to create publisher with default qos settings !!!" << std::endl;
+      //     return false;
+      //   }
+      // }
+      _publisher = _participant->create_publisher(eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT, nullptr);
       if (nullptr == _publisher)
       {
-        std::cerr << "Cannot create publisher with profile " << profile_name << std::endl;
-        std::cerr << "Trying to create publisher with default qos settings..." << std::endl;
-        _publisher = _participant->create_publisher(eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT, nullptr);
-        if (nullptr == _publisher)
-        {
-          std::cerr << "Failed to create publisher with default qos settings !!!" << std::endl;
-          return false;
-        }
+        std::cerr << "Failed to create publisher with default qos settings !!!" << std::endl;
+        return false;
       }
 
       _topic = _participant->create_topic(topic_name, _type.get_type_name(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
@@ -91,7 +97,7 @@ namespace dds_test_app
         return false;
       }
 
-      _writer = _publisher->create_datawriter(_topic, eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT, &_listener);
+      _writer = _publisher->create_datawriter_with_profile(_topic, profile_name, &_listener);
       if (_writer == nullptr)
       {
         std::cerr << "Failed to create DataWriter" << std::endl;

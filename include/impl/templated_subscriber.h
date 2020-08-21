@@ -70,17 +70,24 @@ namespace dds_test_app
       }
 
       _type.register_type(_participant);
-      _subscriber = _participant->create_subscriber_with_profile(profile_name, nullptr);
+      // _subscriber = _participant->create_subscriber_with_profile(profile_name, nullptr);
+      // if (_subscriber == nullptr)
+      // {
+      //   std::cerr << "Cannot create subscriber with qos profile " << profile_name << std::endl;
+      //   std::cerr << "Trying to create subscriber with default qos settings..." << std::endl;
+      //   _subscriber = _participant->create_subscriber(eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT, nullptr);
+      //   if (_subscriber == nullptr)
+      //   {
+      //     std::cerr << "Failed to create subscriber with default qos settings !!!" << std::endl;
+      //     return false;
+      //   }
+      // }
+
+      _subscriber = _participant->create_subscriber(eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT, nullptr);
       if (_subscriber == nullptr)
       {
-        std::cerr << "Cannot create subscriber with qos profile " << profile_name << std::endl;
-        std::cerr << "Trying to create subscriber with default qos settings..." << std::endl;
-        _subscriber = _participant->create_subscriber(eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT, nullptr);
-        if (_subscriber == nullptr)
-        {
-          std::cerr << "Failed to create subscriber with default qos settings !!!" << std::endl;
-          return false;
-        }
+        std::cerr << "Failed to create subscriber with default qos settings !!!" << std::endl;
+        return false;
       }
 
       _topic = _participant->create_topic(topic_name, _type.get_type_name(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
@@ -92,9 +99,7 @@ namespace dds_test_app
 
       this->topic_name = topic_name;
 
-      eprosima::fastdds::dds::DataReaderQos rqos = eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT;
-      rqos.reliability().kind                    = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
-      _reader                                    = _subscriber->create_datareader(_topic, rqos, &_listener);
+      _reader = _subscriber->create_datareader_with_profile(_topic, profile_name, &_listener);
       if (_reader == nullptr)
       {
         std::cerr << "Failed to create DataReader" << std::endl;
