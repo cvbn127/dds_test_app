@@ -18,7 +18,24 @@
 
 #include "pub_sub_factory.h"
 
-int main(int argc, char **argv)
+enum ErrorCodes
+{
+  Success = 0,
+  Error   = 255
+};
+
+auto replace_slash_with_double_underscore(std::string& str) -> bool
+{
+  auto slash_pos = str.find('/');
+  if (slash_pos == std::string::npos)
+  {
+    return false;
+  }
+  str.replace(slash_pos, 1, std::string("__"));
+  return true;
+};
+
+auto main(int argc, char** argv) -> int
 {
 
   dds_test_app::PubSubFactory factory;
@@ -53,10 +70,19 @@ int main(int argc, char **argv)
 
     std::cout << "Acceptable msg_types: " << std::endl;
     factory.print_factory_list();
-    return 0;
+    return ErrorCodes::Success;
   }
-  auto verb     = std::string(argv[1]);
-  auto msg_type = std::string(argv[2]);
+  auto verb                        = std::string(argv[1]);
+  auto msg_type                    = std::string(argv[2]);
+  bool slash_instead_of_underscore = (msg_type.find("__") == std::string::npos) && (msg_type.find('/') != std::string::npos);
+  if (slash_instead_of_underscore)
+  {
+    auto success = replace_slash_with_double_underscore(msg_type);
+    if (!success)
+    {
+      std::cerr << "cannot find slash in " << msg_type << std::endl;
+    }
+  }
 
   if (verb == "pub")
   {
@@ -64,7 +90,7 @@ int main(int argc, char **argv)
     if (!p)
     {
       std::cerr << "Cannot create publisher with type " << msg_type << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     auto topic = default_pub_topic;
     if (argc > 3)
@@ -75,10 +101,10 @@ int main(int argc, char **argv)
     if (!success)
     {
       std::cout << "Failed to init publisher!" << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     p->run();
-    return 0;
+    return ErrorCodes::Success;
   }
   if (verb == "sub")
   {
@@ -86,7 +112,7 @@ int main(int argc, char **argv)
     if (!s)
     {
       std::cerr << "Cannot create subscriber with type " << msg_type << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     auto topic = default_sub_topic;
     if (argc > 3)
@@ -97,10 +123,10 @@ int main(int argc, char **argv)
     if (!success)
     {
       std::cout << "Failed to init subscriber!" << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     s->run();
-    return 0;
+    return ErrorCodes::Success;
   }
   if (verb == "tools")
   {
@@ -108,7 +134,7 @@ int main(int argc, char **argv)
     if (!t)
     {
       std::cerr << "Cannot create tools with type " << msg_type << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     auto pub_topic = default_pub_topic;
     auto sub_topic = default_sub_topic;
@@ -125,11 +151,11 @@ int main(int argc, char **argv)
     if (!success)
     {
       std::cout << "Failed to init tools!" << std::endl;
-      return 255;
+      return ErrorCodes::Error;
     }
     t->run();
-    return 0;
+    return ErrorCodes::Success;
   }
 
-  return 254;
+  return ErrorCodes::Error;
 }
