@@ -112,7 +112,15 @@ namespace dds_test_app
         std::cerr << "Failed to create DataReader. Required profile name is " << profile_name << std::endl;
         std::cerr << "Trying to create default reliable DataReader..." << std::endl;
 
-        return false;
+        auto rqos               = eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT;
+        rqos.reliability().kind = eprosima::fastdds::dds::RELIABLE_RELIABILITY_QOS;
+        _reader                 = _subscriber->create_datareader(_topic, rqos, &_listener);
+
+        if (_reader == nullptr)
+        {
+          std::cerr << "Cannot create default reliable DataReader!" << std::endl;
+          return false;
+        }
       }
 
       std::cout << "Subscriber succesfully created " << topic_name << " " << _type.get_type_name() << std::endl;

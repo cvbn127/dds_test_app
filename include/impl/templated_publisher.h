@@ -106,8 +106,14 @@ namespace dds_test_app
       _writer = _publisher->create_datawriter_with_profile(_topic, profile_name, &_listener);
       if (_writer == nullptr)
       {
-        std::cerr << "Failed to create DataWriter" << std::endl;
-        return false;
+        std::cerr << "Failed to create DataWriter with profile " << profile_name << std::endl;
+        std::cerr << "Trying to create default reliable DataWriter..." << std::endl;
+        _writer = _publisher->create_datawriter(_topic, eprosima::fastdds::dds::DATAWRITER_QOS_DEFAULT, &_listener);
+        if (_writer == nullptr)
+        {
+          std::cerr << "Failed to create default reliable DataWriter..." << std::endl;
+          return false;
+        }
       }
 
       std::cout << "Publisher succesfully created " << topic_name << " " << _type.get_type_name() << std::endl;
