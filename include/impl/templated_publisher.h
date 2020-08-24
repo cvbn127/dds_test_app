@@ -56,7 +56,7 @@ namespace dds_test_app
         eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->delete_participant(_participant);
       }
     };
-    bool init(int rate, const std::string &topic_name, const std::string &profile_name = "test-app-pub-profile") override
+    bool init(int rate, const std::string &topic_name, const std::string &profile_name = "test_app_pub_profile") override
     {
       std::cout << "Initiating test publisher " << topic_name << " " << _type.get_type_name() << std::endl;
       _rate            = rate;
@@ -67,6 +67,12 @@ namespace dds_test_app
         should_delete_participant = true;
         _participant              = eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->create_participant(
             0, eprosima::fastdds::dds::PARTICIPANT_QOS_DEFAULT);
+        if (_participant == nullptr)
+        {
+          std::string err_msg = "Failed to create participant with default qos settings!";
+          std::cerr << err_msg << std::endl;
+          return false;
+        }
       }
 
       _type.register_type(_participant);

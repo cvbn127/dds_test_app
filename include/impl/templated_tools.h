@@ -34,6 +34,7 @@ namespace dds_test_app
     {
       size_t domain_id = 0;
 
+      std::cout << "Trying load xml profile file " << file_path << std::endl;
       const auto ret_code = eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->load_XML_profiles_file(file_path);
       if (eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR == ret_code)
       {
@@ -42,7 +43,7 @@ namespace dds_test_app
         const auto ret_code_default_profiles = eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->load_profiles();
         if (eprosima::fastrtps::types::ReturnCode_t::RETCODE_ERROR == ret_code_default_profiles)
         {
-          std::string err_msg = "Cannot load default XML profile!!!";
+          std::string err_msg = "Cannot load default XML profile!!! " + file_path;
           std::cerr << err_msg;
           return false;
         }
@@ -60,6 +61,7 @@ namespace dds_test_app
         {
           domain_id = attr.domainId;
         }
+        std::cout << "Trying to create Participant with profile " << profile_name << std::endl;
         _participant = eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->create_participant_with_profile(domain_id, profile_name);
       }
 

@@ -33,7 +33,7 @@ namespace dds_test_app
   public:
     using message_type = typename PubSubType::type;
     TemplatedSubscriber(eprosima::fastdds::dds::DomainParticipant *participant = nullptr)
-    : _participant{participant}, _subscriber{nullptr}, _topic{nullptr}, _reader{nullptr}, _type{nullptr} {};
+    : _participant{participant}, _subscriber{nullptr}, _topic{nullptr}, _reader{nullptr}, _type{new PubSubType{}} {};
 
     ~TemplatedSubscriber() override
     {
@@ -58,15 +58,22 @@ namespace dds_test_app
 
     void set_callback(std::function<void(const message_type &)> cb) { callback = cb; };
 
-    bool init(const std::string &topic_name, const std::string &profile_name = "test-app-sub-profile") override
+    bool init(const std::string &topic_name, const std::string &profile_name = "test_app_sub_profile") override
     {
       std::cout << "Initiating test subscriber " << topic_name << " " << _type.get_type_name() << std::endl;
       this->topic_name = topic_name;
       if (_participant == nullptr)
       {
+        std::cout << "Create default participant" << std::endl;
         should_delete_participant = true;
         _participant              = eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->create_participant(
             0, eprosima::fastdds::dds::PARTICIPANT_QOS_DEFAULT);
+        if (_participant == nullptr)
+        {
+          std::string err_msg = "Failed to create participant with default qos settings!";
+          std::cerr << err_msg << std::endl;
+          return false;
+        }
       }
 
       _type.register_type(_participant);
@@ -102,7 +109,9 @@ namespace dds_test_app
       _reader = _subscriber->create_datareader_with_profile(_topic, profile_name, &_listener);
       if (_reader == nullptr)
       {
-        std::cerr << "Failed to create DataReader" << std::endl;
+        std::cerr << "Failed to create DataReader. Required profile name is " << profile_name << std::endl;
+        std::cerr << "Trying to create default reliable DataReader..." << std::endl;
+
         return false;
       }
 
