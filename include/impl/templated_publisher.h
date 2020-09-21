@@ -112,7 +112,6 @@ namespace dds_test_app
     };
     void publish(const message_type &msg)
     {
-      std::cout << "publish once" << std::endl;
       mp_publisher->write(const_cast<message_type *>(&msg));
     };
     void update_message(const message_type &msg) { latest_message = msg; };

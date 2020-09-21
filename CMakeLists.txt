@@ -23,7 +23,10 @@ find_package(sh_chassis_msgs_lib REQUIRED)
 find_package(unique_identifier_msgs_lib REQUIRED)
 find_package(geographic_msgs_lib REQUIRED)
 
-add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp)
+add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp 
+  src/sensor_msgs/image.cpp
+  src/nav_msgs/odometry.cpp
+)
 
 target_include_directories(TestApp PRIVATE include)
 
