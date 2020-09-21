@@ -130,7 +130,7 @@ namespace dds_test_app
         {
           std::this_thread::sleep_for(std::chrono::milliseconds(250)); // Sleep 250 ms
         }
-
+        // publish(latest_message);
         _writer->write(&latest_message);
         ++msgsent;
         std::cout << "Sending sample, count=" << msgsent << "" << std::endl;
@@ -139,7 +139,6 @@ namespace dds_test_app
     };
     void publish(const message_type &msg)
     {
-      std::cout << "publish once" << std::endl;
       _writer->write(&msg);
     };
     void update_message(const message_type &msg) { latest_message = msg; };
