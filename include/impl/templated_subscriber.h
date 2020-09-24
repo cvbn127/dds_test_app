@@ -85,7 +85,6 @@ namespace dds_test_app
       {
         return false;
       }
-      SubListener::last_received_timepoint = std::chrono::steady_clock::now();
       std::cout << "Subscriber succesfully created " << topic_name << " " << myType.getName() << std::endl;
       return true;
     };
@@ -113,7 +112,7 @@ namespace dds_test_app
     class SubListener : public eprosima::fastrtps::SubscriberListener
     {
     public:
-      SubListener() : n_matched(0), n_msg(0){};
+      SubListener() : n_matched(0){};
       ~SubListener(){};
       void onSubscriptionMatched(eprosima::fastrtps::Subscriber *sub, eprosima::fastrtps::rtps::MatchingInfo &info)
       {
@@ -151,8 +150,9 @@ namespace dds_test_app
           }
         }
       };
-      eprosima::fastrtps::SampleInfo_t             m_info;
-      int                                          n_matched;
+      SubStatistics                    sub_statistics;
+      eprosima::fastrtps::SampleInfo_t m_info;
+      int                              n_matched;
     } m_listener;
     PubSubType myType;
   };
