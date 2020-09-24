@@ -26,6 +26,7 @@ find_package(geographic_msgs_lib REQUIRED)
 add_executable(TestApp src/main.cxx src/pub_sub_factory.cpp 
   src/sensor_msgs/image.cpp
   src/nav_msgs/odometry.cpp
+  src/sub_statistics.cpp
 )
 
 target_include_directories(TestApp PRIVATE include)

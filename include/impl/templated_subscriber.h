@@ -11,6 +11,7 @@
 #include <functional>
 
 #include "interface/subscriber.h"
+#include "sub_statistics.h"
 
 namespace dds_test_app
 {
@@ -84,7 +85,6 @@ namespace dds_test_app
       {
         return false;
       }
-      SubListener::last_received_timepoint = std::chrono::steady_clock::now();
       std::cout << "Subscriber succesfully created " << topic_name << " " << myType.getName() << std::endl;
       return true;
     };
@@ -112,7 +112,7 @@ namespace dds_test_app
     class SubListener : public eprosima::fastrtps::SubscriberListener
     {
     public:
-      SubListener() : n_matched(0), n_msg(0){};
+      SubListener() : n_matched(0){};
       ~SubListener(){};
       void onSubscriptionMatched(eprosima::fastrtps::Subscriber *sub, eprosima::fastrtps::rtps::MatchingInfo &info)
       {
@@ -121,6 +121,7 @@ namespace dds_test_app
         if (info.status == eprosima::fastrtps::rtps::MATCHED_MATCHING)
         {
           n_matched++;
+          sub_statistics.reset();
           std::cout << "Subscriber matched" << std::endl;
         }
         else
@@ -140,29 +141,21 @@ namespace dds_test_app
         {
           if (m_info.sampleKind == eprosima::fastrtps::rtps::ALIVE)
           {
-            // Print your structure data here.
-            ++n_msg;
-            std::cout << "Sample received, count=" << n_msg << std::endl;
-            auto now                = std::chrono::steady_clock::now();
-            auto duration           = now - last_received_timepoint;
-            last_received_timepoint = now;
+            auto duration = sub_statistics.get_time_from_last_receive();
             std::cout << "time since last message(ms): " << (std::chrono::duration_cast<std::chrono::milliseconds>(duration)).count() << std::endl;
+            sub_statistics.receive();
+            std::cout << "Sample received, count=" << sub_statistics.get_receive_count() << std::endl;
             print_message<PubSubType>(msg);
             callback(msg);
           }
         }
       };
-      eprosima::fastrtps::SampleInfo_t             m_info;
-      int                                          n_matched;
-      int                                          n_msg;
-      static std::chrono::steady_clock::time_point last_received_timepoint;
-      // std::chrono::steady_clock::now();
+      SubStatistics                    sub_statistics;
+      eprosima::fastrtps::SampleInfo_t m_info;
+      int                              n_matched;
     } m_listener;
     PubSubType myType;
   };
-
-  template <typename PubSubType>
-  std::chrono::steady_clock::time_point TemplatedSubscriber<PubSubType>::SubListener::last_received_timepoint = std::chrono::steady_clock::now();
 
   template <typename PubSubType>
   std::function<void(const typename PubSubType::type &)> TemplatedSubscriber<PubSubType>::callback = [](const typename PubSubType::type &msg) {};
