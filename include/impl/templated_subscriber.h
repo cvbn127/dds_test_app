@@ -51,13 +51,13 @@ namespace dds_test_app
         should_delete_participant = true;
         eprosima::fastrtps::ParticipantAttributes PParam;
         PParam.rtps.setName("Participant_subscriber"); // You can put the name you want
-        PParam.domainId = 120;
+        PParam.rtps.builtin.domainId = 120;
         mp_participant  = eprosima::fastrtps::Domain::createParticipant(PParam);
       }
-      eprosima::fastdds::dds::TopicDataType *data_type = nullptr;
+      eprosima::fastrtps::TopicDataType *data_type = nullptr;
       if (!eprosima::fastrtps::Domain::getRegisteredType(mp_participant, myType.getName(), &data_type))
       {
-        eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastdds::dds::TopicDataType *>(&myType));
+        eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType *>(&myType));
         is_type_registred = true;
       }
       else

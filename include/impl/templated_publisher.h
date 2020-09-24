@@ -52,15 +52,15 @@ namespace dds_test_app
         should_delete_participant = true;
         eprosima::fastrtps::ParticipantAttributes PParam;
         PParam.rtps.setName("Participant_publisher"); // You can put here the name you want
-        PParam.domainId = 120;
+        PParam.rtps.builtin.domainId = 120;
         mp_participant  = eprosima::fastrtps::Domain::createParticipant(PParam);
       }
 
       // Register the type
-      eprosima::fastdds::dds::TopicDataType *data_type = nullptr;
+      eprosima::fastrtps::TopicDataType *data_type = nullptr;
       if (!eprosima::fastrtps::Domain::getRegisteredType(mp_participant, myType.getName(), &data_type))
       {
-        eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastdds::dds::TopicDataType *>(&myType));
+        eprosima::fastrtps::Domain::registerType(mp_participant, static_cast<eprosima::fastrtps::TopicDataType *>(&myType));
         is_type_registred = true;
       }
       else
@@ -76,7 +76,8 @@ namespace dds_test_app
                   << ". Using default values." << std::endl;
         publisher_att.topic.topicKind        = eprosima::fastrtps::rtps::NO_KEY;
         publisher_att.historyMemoryPolicy    = eprosima::fastrtps::rtps::PREALLOCATED_WITH_REALLOC_MEMORY_MODE;
-        publisher_att.qos.m_publishMode.kind = eprosima::fastdds::dds::PublishModeQosPolicyKind_t::ASYNCHRONOUS_PUBLISH_MODE;
+        publisher_att.qos.m_publishMode.kind = eprosima::fastrtps::
+          PublishModeQosPolicyKind::ASYNCHRONOUS_PUBLISH_MODE;
       }
       publisher_att.topic.topicDataType = myType.getName(); // This type MUST be registered
       publisher_att.topic.topicName     = topic_name;
